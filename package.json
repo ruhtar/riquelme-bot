@@ -1,0 +1,18 @@
+{
+  "name": "riquelme-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc src/index.ts",
+    "start": "tsc src/index.ts && node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.4",
+    "typescript": "^5.3.3"
+  }
+}
