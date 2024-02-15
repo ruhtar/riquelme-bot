@@ -10,8 +10,17 @@ export class DatabaseInitializer{
             } else {
                 console.log("Conectado ao banco de dados SQLite");
                 this.createTimeInVoiceTable();
+                this.createCounterTable();
             }
         });
+    }
+    createCounterTable() {
+        this.db.run(`
+        CREATE TABLE IF NOT EXISTS counter (
+            darkleo INTEGER,
+            laele INTEGER
+        )
+    `);
     }
 
     private createTimeInVoiceTable() {
