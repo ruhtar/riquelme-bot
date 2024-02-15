@@ -4,20 +4,21 @@ import { DatabaseManager } from "./databaseManager";
 export class VoiceTimeManager {
     private startTimePerUser = new Map<string, number>();
 
-    public async handleCommand(message: Message, command: string) {
-        if (command.toLowerCase() === "voice") {
-            const userId = message.author.id;
-            const databaseManager = new DatabaseManager();
-            const totalTime = await databaseManager.getTimeInVoiceByUserId(userId);
-            console.log('totalTime',totalTime)
+    public async getTotalTimeInVoice(message: Message){
+      const userId = message.author.id;
+      const databaseManager = new DatabaseManager();
+      const totalTime = await databaseManager.getTimeInVoiceByUserId(userId);
 
-            if(!totalTime) return;
-            const hours = Math.floor(totalTime / 3600);
-            const minutes = Math.floor((totalTime % 3600) / 60);
-            const seconds = totalTime % 60;
+      if(!totalTime) {
+        message.reply(`Você passou um total de 0 horas, 0 minutos e 0 segundos em chamadas de voz.`);
+        return;
+      }
 
-            message.reply(`Você passou um total de ${hours} horas, ${minutes} minutos e ${seconds} segundos em chamadas de voz.`);
-        }
+      const hours = Math.floor(totalTime / 3600);
+      const minutes = Math.floor((totalTime % 3600) / 60);
+      const seconds = totalTime % 60;
+
+      message.reply(`Você passou um total de ${hours} horas, ${minutes} minutos e ${seconds} segundos em chamadas de voz.`);
     }
 
     public async CountUsersTimeOnVoice(oldState: VoiceState, newState: VoiceState){

@@ -1,6 +1,7 @@
 export * from "colors";
 export { client };
 
+  import { CommandHandler } from "./commands/commandHandler";
   import { DatabaseInitializer } from "./managers/databaseInitializer";
   import { VoiceTimeManager } from "./managers/voiceTimeManager";
   import { ExtendedClient } from "./structs/ExtendedClient";
@@ -8,6 +9,7 @@ export { client };
 
 const client = new ExtendedClient();
 new DatabaseInitializer();
+const commandHandler = new CommandHandler();
 
 client.start();
 const voiceTimeManager = new VoiceTimeManager();
@@ -23,7 +25,7 @@ client.on("messageCreate", async (message) => {
 
   if (content.startsWith("!")) {
       const command = content.slice(1).toLowerCase();
-      await voiceTimeManager.handleCommand(message, command);
+      await commandHandler.handleCommand(message, command);
   }
 });
 
