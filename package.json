@@ -2,7 +2,7 @@
   "name": "riquelme-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon --watch 'src/' --exec ts-node src/index.ts -e ts",
     "dev2": "ts-node src/index.ts",

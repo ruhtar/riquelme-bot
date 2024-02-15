@@ -1,13 +1,15 @@
 export * from "colors";
 export { client };
 
-  import { VoiceTimeManager } from "./features/VoiceTimeManager";
+  import { DatabaseInitializer } from "./managers/databaseInitializer";
+  import { VoiceTimeManager } from "./managers/voiceTimeManager";
   import { ExtendedClient } from "./structs/ExtendedClient";
 
 
 const client = new ExtendedClient();
-client.start();
+new DatabaseInitializer();
 
+client.start();
 const voiceTimeManager = new VoiceTimeManager();
 
 client.on('voiceStateUpdate', (oldState, newState) => {

@@ -2,6 +2,8 @@ import { BitFieldResolvable, Client, GatewayIntentsString, IntentsBitField, Part
 import * as dotenv from "dotenv";
 dotenv.config();
 
+
+//Configure os Intents -> São as permissões que o Cliente precisa ter para interagir com determinados eventos.
 export class ExtendedClient extends Client {
     constructor(){
         super({

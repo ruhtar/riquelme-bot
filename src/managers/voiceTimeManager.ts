@@ -1,30 +1,9 @@
 import { Message, VoiceState } from "discord.js";
-import sqlite3 from "sqlite3";
+import { DatabaseManager } from "./databaseManager";
 
 export class VoiceTimeManager {
     private startTimePerUser = new Map<string, number>();
     private voiceTime = new Map<string, number>();
-    public db: sqlite3.Database;
-
-    constructor() {
-        this.db = new sqlite3.Database("db", (err) => {
-            if (err) {
-                console.error("Erro ao conectar ao banco de dados:", err.message);
-            } else {
-                console.log("Conectado ao banco de dados SQLite");
-                this.createTables();
-            }
-        });
-    }
-
-    private createTables() {
-        this.db.run(`
-            CREATE TABLE IF NOT EXISTS voice_times (
-                user_id TEXT PRIMARY KEY,
-                total_time INTEGER
-            )
-        `);
-    }
 
     public async handleCommand(message: Message, command: string) {
         if (command.toLowerCase() === "voice") {
@@ -39,19 +18,25 @@ export class VoiceTimeManager {
         }
     }
 
-    public CountUsersTimeOnVoice(oldState: VoiceState, newState: VoiceState){
+    public async CountUsersTimeOnVoice(oldState: VoiceState, newState: VoiceState){
         const member = oldState.member || newState.member;
         const userId = member?.id;
+        const databaseManager = new DatabaseManager();
       
         if (newState.channel && userId && !oldState.channel) {
           // Entrou em um canal
           console.log("Entrou em um canal");
       
           this.startTimePerUser.set(userId, Math.floor(Date.now() / 1000));
-          if (!this.voiceTime.has(userId)) {
+          const totalTime = await databaseManager.getVoiceTimeByUserId(userId)
+          console.log('totalTime buscado do banco',totalTime)
+          if (!totalTime) { //this.voiceTime.has(userId)
             // Se o usuário não estava em um canal antes, inicializa o tempo
             // TODO: Alterar para que ele puxe do SQLite o tempo ao inves de ficar guardando em memória. 
-            this.voiceTime.set(userId, 0);
+            // this.voiceTime.set(userId, 0);
+            console.log("salvou 0 no banco pq foi a primeira vez")
+            databaseManager.saveToDatabase(userId, 0)
+            console.log('databaseManager.getVoiceTimeByUserId(userId)',await databaseManager.getVoiceTimeByUserId(userId))
           }
         }
       
@@ -60,13 +45,19 @@ export class VoiceTimeManager {
           console.log("Saiu do canal");
           
           const endTime = Math.floor(Date.now() / 1000); // Converte para segundos
-          const startTime = this.startTimePerUser.get(userId);
+        //   let startTime = await databaseManager.getVoiceTimeByUserId(userId);
+          let startTime = this.startTimePerUser.get(userId);
+          console.log('startTime pego do Map',startTime)
+          if(!startTime){
+            // databaseManager.saveToDatabase(userId, 0)
+            startTime = Math.floor(Date.now() / 1000);
+          }
       
-          const timeInVoiceToAdd = endTime - startTime!;
+          const timeInVoiceToAdd = endTime - startTime;
           console.log('timeInVoiceToAdd', timeInVoiceToAdd);
           if(!timeInVoiceToAdd) return;
       
-          const oldVoiceTime = this.voiceTime.get(userId);
+          const oldVoiceTime =  await databaseManager.getVoiceTimeByUserId(userId);
           console.log('oldVoiceTime', oldVoiceTime);
       
           const newVoiceTime = oldVoiceTime! + timeInVoiceToAdd;
@@ -74,29 +65,13 @@ export class VoiceTimeManager {
       
           this.voiceTime.set(userId, newVoiceTime);
           
-          this.saveToDatabase(userId, newVoiceTime);
+          console.log('newVoiceTime salvo no banco',newVoiceTime)
+          databaseManager.saveToDatabase(userId, newVoiceTime);
           this.startTimePerUser.set(userId, 0); //reset
         }
         console.log("voiceTime", this.voiceTime.get(userId!));
-        console.log(this.getTimeByUserId(userId!));
-    }
-
-    private getTimeByUserId(userId: string){
-        return this.db.get(`SELECT total_time FROM voice_times WHERE user_id = ?`, [userId], (err, row)=>{
-            if (err) {
-                return console.error(err.message);
-              }
-              return row
-                ? console.log(row)
-                : console.log(``);
-        });
+        console.log("salvo no banco", await databaseManager.getVoiceTimeByUserId(userId!));
     }
 
 
-    private saveToDatabase(userId: string, totalVoiceTime: number) {
-        this.db.run(`
-            INSERT OR REPLACE INTO voice_times (user_id, total_time)
-            VALUES (?, ?)
-        `, [userId, totalVoiceTime]);
-    }
 }
