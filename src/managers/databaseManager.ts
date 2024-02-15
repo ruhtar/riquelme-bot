@@ -11,7 +11,7 @@ export class DatabaseManager{
         });
     }
 
-    public getVoiceTimeByUserId(userId: string): Promise<number | null> {
+    public getTimeInVoiceByUserId(userId: string): Promise<number | null> {
         //A consulta ao SQLite deve ser feita de maneira assíncrona, por isso preciso retornar uma Promise
         // **Li que a maneira correta é lidar com os callbacks, mas ficaria horrível, melhor usar Promise mesmo
         return new Promise((resolve, reject) => {

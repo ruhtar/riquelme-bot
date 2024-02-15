@@ -28,5 +28,5 @@ client.on("messageCreate", async (message) => {
 });
 
 client.on("ready", () => {
-  console.log("Burucutugurugudu akstiguiriguidô".green);
+  console.log("Burucutugurugudu akstiguiriguidô".blue);
 });
