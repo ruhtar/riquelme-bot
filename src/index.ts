@@ -8,20 +8,23 @@ export { client };
 const client = new ExtendedClient();
 client.start();
 
-const voiceTimeManage = new VoiceTimeManager();
+const voiceTimeManager = new VoiceTimeManager();
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  voiceTimeManage.CountUsersTimeOnVoice(oldState, newState);
+  voiceTimeManager.CountUsersTimeOnVoice(oldState, newState);
+});
+
+client.on("messageCreate", async (message) => {
+  if (message.author.id === client.user?.id) return; // Evita que Riquelme responda a si mesmo.
+
+  const content = message.content;
+
+  if (content.startsWith("!")) {
+      const command = content.slice(1).toLowerCase();
+      await voiceTimeManager.handleCommand(message, command);
+  }
 });
 
 client.on("ready", () => {
   console.log("Burucutugurugudu akstiguiriguidô".green);
-});
-
-client.on("messageCreate", (message) => {
-  if (message.author.id === client.user?.id) return; // Evita que Riquelme responda a si mesmo.
-
-  // message.reply({
-  //     content: `Eae man, ${message.author.displayName}, ${message.author.username}, ${message.author.globalName}`
-  // })
 });
