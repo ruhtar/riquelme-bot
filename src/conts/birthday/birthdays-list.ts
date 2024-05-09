@@ -12,8 +12,7 @@ export const birthdays : Aniversarios = {
     "Pablo Lyra": "05-02",
     "Victola": "07-11",
     "Doutor Médico Henrique": "10-05",
-    "Lelis": "08-08",
-    "teste": "05-09"
+    "Lelis": "08-08"
 };
 
 interface Aniversarios {

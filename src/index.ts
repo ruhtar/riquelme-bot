@@ -6,10 +6,10 @@ export { client };
   import { TextChannel } from "discord.js";
   import * as dotenv from "dotenv";
   import schedule from 'node-schedule';
-  import { CommandHandler } from "./commands/commandHandler";
   import { parabens } from "./conts/birthday/birthday-reply-messages";
   import { birthdays } from "./conts/birthday/birthdays-list";
   import { DatabaseInitializer } from "./database/database-initializer";
+  import { CommandManager } from "./managers/command-mananger";
   import { VoiceTimeManager } from "./managers/voice-time-manager";
   import { ExtendedClient } from "./structs/ExtendedClient";
 
@@ -17,7 +17,7 @@ dotenv.config();
 const client = new ExtendedClient();
 
 new DatabaseInitializer();
-const commandHandler = new CommandHandler();
+const commandHandler = new CommandManager();
 
 client.start();
 const voiceTimeManager = new VoiceTimeManager();
@@ -30,7 +30,6 @@ function checkBirthday(){
   
   for (const pessoa in birthdays) {
       if (birthdays[pessoa] === dataHoje) {
-          console.log(`Hoje é aniversário de ${pessoa}! 🎉🎂`);
           const channelId = process.env.CHANNEL_ID;
 
           if(!channelId) return;
@@ -39,8 +38,11 @@ function checkBirthday(){
 
           if(!channel) return;
 
-          (channel as TextChannel).send({ content: parabens[3] })
-          .catch(err => {
+          const randomIndex = Math.floor(Math.random() * parabens.length);
+          const mensagemAleatoria = parabens[randomIndex];
+
+          (channel as TextChannel).send({ content: mensagemAleatoria })
+          .catch(err => { 
             console.error(err);
           });
       }
@@ -73,5 +75,17 @@ client.on("messageCreate", async (message) => {
 
 client.on("ready", () => {
   checkBirthday()
-  console.log("Burucutugurugudu akstiguiriguidô".blue);
+
+  const channelId = process.env.CHANNEL_ID;
+
+  if(!channelId) return;
+
+  const channel = client.channels.cache.get(channelId);
+
+  if(!channel) return;
+
+  (channel as TextChannel).send({ content: "Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô" })
+  .catch(err => { 
+    console.error(err);
+  });
 });

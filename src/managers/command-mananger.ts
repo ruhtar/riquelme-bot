@@ -2,9 +2,9 @@ import { Message } from "discord.js";
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { Repository } from "../database/repository";
-import { VoiceTimeManager } from "../managers/voice-time-manager";
+import { VoiceTimeManager } from "./voice-time-manager";
 
-export class CommandHandler{
+export class CommandManager{
     public async handleCommand(message: Message, command: string) {
         if(counterCommandsList.includes(command.toLowerCase())){
             const repository = new Repository();
