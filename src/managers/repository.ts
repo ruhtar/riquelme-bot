@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 
-export class DatabaseManager{
+export class Repository{
     public db: sqlite3.Database;
 
     constructor() {

@@ -12,35 +12,30 @@ export class DatabaseInitializer{
                 console.log("Conectado ao banco de dados SQLite");
                 this.db.serialize(()=>{
                     this.createTimeInVoiceTable();
-                    this.createCounterTable();
-                    this.insertZeroCounter();
+                    this.createCommandsTables();
                 });
             }
         });
     }
-    private createCounterTable() {
-        let columns = this.generateColumns(); // Gera a parte das colunas da tabela
-        this.db.run(`
-            CREATE TABLE IF NOT EXISTS counter (
+    private createCommandsTables() {
+        counterCommandsList.forEach((command) => {
+            this.db.run(`
+            CREATE TABLE IF NOT EXISTS ${command} (
                 id TEXT PRIMARY KEY,
-                ${columns}
+                ${command}_counter INTEGER DEFAULT NULL
             )
-        `);
+            `);
+
+            this.insertZeroCounters(command)
+        })
     }
-    
-    private generateColumns(): string {
-        let columns = counterCommandsList.map(command => `${command} INTEGER DEFAULT 0`).join(", ");
-        return columns;
-    }
-    
-    private insertZeroCounter() {
-        this.db.get(`SELECT * FROM counter WHERE id = 'default'`, (err, row) => {
+
+    private insertZeroCounters(command: string) {
+        this.db.get(`SELECT * FROM ${command} WHERE id = 'default'`, (err, row) => {
             if (!row) {
-                let columnNames = counterCommandsList.join(", ");
-                let columnValues = counterCommandsList.map(() => "0").join(", ");
                 this.db.run(`
-                    INSERT INTO counter (id, ${columnNames})
-                    VALUES ('default', ${columnValues})
+                    INSERT INTO ${command} (id, ${command}_counter)
+                    VALUES ('default', 0)
                 `);
             }
         });

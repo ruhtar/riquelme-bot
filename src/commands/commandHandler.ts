@@ -1,16 +1,17 @@
 import { Message } from "discord.js";
 import { counterCommandsList } from "../conts/commandsList";
-import { DatabaseManager } from "../managers/databaseManager";
+import { replyMessage } from "../conts/commandsMessages";
+import { Repository } from "../managers/repository";
 import { VoiceTimeManager } from "../managers/voiceTimeManager";
 
 export class CommandHandler{
     public async handleCommand(message: Message, command: string) {
         if(counterCommandsList.includes(command.toLowerCase())){
-            const databaseManager = new DatabaseManager();
-            databaseManager.incrementCommandCounter(command);
-            var counterObject = await databaseManager.getCommandCounter(command);
+            const repository = new Repository();
+            repository.incrementCommandCounter(command);
+            var counterObject = await repository.getCommandCounter(command);
             var counter = Object.values(counterObject)[0];
-            this.replyMessage(message, command, counter);
+            replyMessage(message, command, counter);
         }
 
         if(command.toLowerCase() === "comandos")
@@ -25,37 +26,5 @@ export class CommandHandler{
         }
     }
 
-    private replyMessage(message: Message, command: string, counter: unknown){
-        switch (command) {
-            case "flau":
-                message.reply(`Esse é o ${counter}º corte do Flau Podcast™`)
-                break;         
-            case "lanchinho":
-                message.reply(`Você caiu no lanchinho do victão pela ${counter}º vez.`)
-                break;            
-            case "safadeza":
-                message.reply(`Victor Mateus falou uma safadeza pela ${counter}º vez.`)
-                break;
-            case "fakenews":
-                message.reply(`É A ${counter}º FAKE NEWS QUE PABLO LYRA SOLTA`)
-                break;
-            case "flash":
-                if (counter === 1) 
-                    message.reply(`${counter} pessoa teve flash.`)
-                else
-                    message.reply(`${counter} pessoas já tiveram flash.`)
-                break;
-            case "darkleo":
-                message.reply(`Leossamp entrou no modo dark ${counter} vezes.`)
-                break;
-            case "laele":
-                if (counter === 1) 
-                    message.reply(`laele ${counter} vez`)
-                else 
-                    message.reply(`laele ${counter} vezes`)
-                break;
-            default:
-                break;
-        }
-    }
+
 }
