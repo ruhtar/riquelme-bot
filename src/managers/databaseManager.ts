@@ -16,7 +16,7 @@ export class DatabaseManager{
         stmt.finalize();
     }
 
-    public getCommandCounter(command: string) : any{ //yes, i know, judge me
+    public getCommandCounter(command: string) : any { //yes, i know, judge me
         return new Promise((resolve, reject) => {
             this.db.get(`SELECT ${command} FROM counter`, (err, row) => {
                 if (err) {
@@ -31,12 +31,6 @@ export class DatabaseManager{
             });
         })
     }
-
-    // public getCommandCounter(command: string): number{
-    //     const stmt = this.db.prepare(`SELECT 1 ${command} FROM counter`);
-    //     stmt.get();
-    //     stmt.finalize();
-    // }
 
     public getTimeInVoiceByUserId(userId: string): Promise<number | null> {
         //A consulta ao SQLite deve ser feita de maneira assíncrona, por isso preciso retornar uma Promise
