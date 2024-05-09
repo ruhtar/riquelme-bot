@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
+import { counterCommandsList } from "../conts/commandsList";
 import { DatabaseManager } from "../managers/databaseManager";
 import { VoiceTimeManager } from "../managers/voiceTimeManager";
-import { counterCommandsList } from "./commandsList";
 
 export class CommandHandler{
     public async handleCommand(message: Message, command: string) {

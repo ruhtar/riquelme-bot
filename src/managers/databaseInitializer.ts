@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { counterCommandsList } from "../commands/commandsList";
+import { counterCommandsList } from "../conts/commandsList";
 
 export class DatabaseInitializer{
     public db: sqlite3.Database;
