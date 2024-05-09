@@ -10,6 +10,33 @@ export class DatabaseManager{
             }
         });
     }
+    public incrementCommandCounter(command: string){
+        const stmt = this.db.prepare(`UPDATE counter SET ${command} = ${command} + 1`);
+        stmt.run();
+        stmt.finalize();
+    }
+
+    public getCommandCounter(command: string) : any{ //yes, i know, judge me
+        return new Promise((resolve, reject) => {
+            this.db.get(`SELECT ${command} FROM counter`, (err, row) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                }
+                if (row) {
+                    resolve(row);
+                } else {
+                    resolve(null); 
+                }
+            });
+        })
+    }
+
+    // public getCommandCounter(command: string): number{
+    //     const stmt = this.db.prepare(`SELECT 1 ${command} FROM counter`);
+    //     stmt.get();
+    //     stmt.finalize();
+    // }
 
     public getTimeInVoiceByUserId(userId: string): Promise<number | null> {
         //A consulta ao SQLite deve ser feita de maneira assíncrona, por isso preciso retornar uma Promise
@@ -30,7 +57,7 @@ export class DatabaseManager{
         });
     }
 
-    public saveToDatabase(userId: string, totalVoiceTime: number) {
+    public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number) {
         this.db.run(`
             INSERT OR REPLACE INTO time_in_voice (user_id, total_time)
             VALUES (?, ?)

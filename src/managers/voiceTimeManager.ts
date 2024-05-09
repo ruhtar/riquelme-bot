@@ -36,7 +36,7 @@ export class VoiceTimeManager {
             // Se o usuário não estava em um canal antes, inicializa o tempo
             // TODO: Alterar para que ele puxe do SQLite o tempo ao inves de ficar guardando em memória. 
             // this.voiceTime.set(userId, 0);
-            databaseManager.saveToDatabase(userId, 0)
+            databaseManager.saveTotalVoiceTimeToDatabase(userId, 0)
           }
         }
       
@@ -59,7 +59,7 @@ export class VoiceTimeManager {
       
           const newVoiceTime = oldVoiceTime! + timeInVoiceToAdd;
           
-          databaseManager.saveToDatabase(userId, newVoiceTime);
+          databaseManager.saveTotalVoiceTimeToDatabase(userId, newVoiceTime);
           this.startTimePerUser.set(userId, 0); //reset
         }
     }

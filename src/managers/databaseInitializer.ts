@@ -9,18 +9,37 @@ export class DatabaseInitializer{
                 console.error("Erro ao conectar ao banco de dados:", err.message);
             } else {
                 console.log("Conectado ao banco de dados SQLite");
-                this.createTimeInVoiceTable();
-                this.createCounterTable();
+                this.db.serialize(()=>{
+                    this.createTimeInVoiceTable();
+                    this.createCounterTable();
+                    this.insertZeroCounter();
+                });
             }
         });
     }
-    createCounterTable() {
+    private createCounterTable() {
         this.db.run(`
         CREATE TABLE IF NOT EXISTS counter (
-            darkleo INTEGER,
-            laele INTEGER
-        )
-    `);
+            id TEXT PRIMARY KEY,
+            darkleo INTEGER DEFAULT 0,
+            laele INTEGER DEFAULT 0,
+            lanchinho INTEGER DEFAULT 0,
+            safadeza INTEGER DEFAULT 0,
+            fakenews INTEGER DEFAULT 0,
+            flash INTEGER DEFAULT 0
+            )
+        `);
+    }
+
+    private insertZeroCounter(){
+        this.db.get(`SELECT * FROM counter WHERE id = 'default'`, (err, row) => {
+            if (!row) {
+                this.db.run(`
+                    INSERT INTO counter (id, darkleo, laele, lanchinho, safadeza, fakenews, flash)
+                    VALUES ('default', 0, 0, 0, 0, 0, 0)
+                `);
+            }
+        });
     }
 
     private createTimeInVoiceTable() {
