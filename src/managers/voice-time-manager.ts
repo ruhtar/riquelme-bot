@@ -1,5 +1,5 @@
 import { Message, VoiceState } from "discord.js";
-import { Repository } from "./repository";
+import { Repository } from "../database/repository";
 
 export class VoiceTimeManager {
     private startTimePerUser = new Map<string, number>();

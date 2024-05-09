@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
-import { counterCommandsList } from "../conts/commandsList";
-import { replyMessage } from "../conts/commandsMessages";
-import { Repository } from "../managers/repository";
-import { VoiceTimeManager } from "../managers/voiceTimeManager";
+import { counterCommandsList } from "../conts/commands/commands-list";
+import { replyMessage } from "../conts/commands/commands-reply-messages";
+import { Repository } from "../database/repository";
+import { VoiceTimeManager } from "../managers/voice-time-manager";
 
 export class CommandHandler{
     public async handleCommand(message: Message, command: string) {

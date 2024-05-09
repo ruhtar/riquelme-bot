@@ -7,10 +7,10 @@ export { client };
   import * as dotenv from "dotenv";
   import schedule from 'node-schedule';
   import { CommandHandler } from "./commands/commandHandler";
-  import { parabens } from "./conts/birthdayMessages";
-  import { birthdays } from "./conts/birthdays";
-  import { DatabaseInitializer } from "./managers/databaseInitializer";
-  import { VoiceTimeManager } from "./managers/voiceTimeManager";
+  import { parabens } from "./conts/birthday/birthday-reply-messages";
+  import { birthdays } from "./conts/birthday/birthdays-list";
+  import { DatabaseInitializer } from "./database/database-initializer";
+  import { VoiceTimeManager } from "./managers/voice-time-manager";
   import { ExtendedClient } from "./structs/ExtendedClient";
 
 dotenv.config();
