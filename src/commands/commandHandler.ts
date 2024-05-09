@@ -27,6 +27,9 @@ export class CommandHandler{
 
     private replyMessage(message: Message, command: string, counter: unknown){
         switch (command) {
+            case "flau":
+                message.reply(`Esse é o ${counter}º corte do Flau Podcast™`)
+                break;         
             case "lanchinho":
                 message.reply(`Você caiu no lanchinho do victão pela ${counter}º vez.`)
                 break;            
@@ -38,7 +41,7 @@ export class CommandHandler{
                 break;
             case "flash":
                 if (counter === 1) 
-                    message.reply(`${counter} pessoa tem flash.`)
+                    message.reply(`${counter} pessoa teve flash.`)
                 else
                     message.reply(`${counter} pessoas já tiveram flash.`)
                 break;

@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+import { counterCommandsList } from "../commands/commandsList";
 
 export class DatabaseInitializer{
     public db: sqlite3.Database;
@@ -18,25 +19,28 @@ export class DatabaseInitializer{
         });
     }
     private createCounterTable() {
+        let columns = this.generateColumns(); // Gera a parte das colunas da tabela
         this.db.run(`
-        CREATE TABLE IF NOT EXISTS counter (
-            id TEXT PRIMARY KEY,
-            darkleo INTEGER DEFAULT 0,
-            laele INTEGER DEFAULT 0,
-            lanchinho INTEGER DEFAULT 0,
-            safadeza INTEGER DEFAULT 0,
-            fakenews INTEGER DEFAULT 0,
-            flash INTEGER DEFAULT 0
+            CREATE TABLE IF NOT EXISTS counter (
+                id TEXT PRIMARY KEY,
+                ${columns}
             )
         `);
     }
-
-    private insertZeroCounter(){
+    
+    private generateColumns(): string {
+        let columns = counterCommandsList.map(command => `${command} INTEGER DEFAULT 0`).join(", ");
+        return columns;
+    }
+    
+    private insertZeroCounter() {
         this.db.get(`SELECT * FROM counter WHERE id = 'default'`, (err, row) => {
             if (!row) {
+                let columnNames = counterCommandsList.join(", ");
+                let columnValues = counterCommandsList.map(() => "0").join(", ");
                 this.db.run(`
-                    INSERT INTO counter (id, darkleo, laele, lanchinho, safadeza, fakenews, flash)
-                    VALUES ('default', 0, 0, 0, 0, 0, 0)
+                    INSERT INTO counter (id, ${columnNames})
+                    VALUES ('default', ${columnValues})
                 `);
             }
         });
