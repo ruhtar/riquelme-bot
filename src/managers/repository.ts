@@ -11,14 +11,14 @@ export class Repository{
         });
     }
     public incrementCommandCounter(command: string){
-        const stmt = this.db.prepare(`UPDATE counter SET ${command} = ${command} + 1`);
+        const stmt = this.db.prepare(`UPDATE ${command} SET ${command}_counter = ${command}_counter + 1`);
         stmt.run();
         stmt.finalize();
     }
 
     public getCommandCounter(command: string) : any { //yes, i know, judge me
         return new Promise((resolve, reject) => {
-            this.db.get(`SELECT ${command} FROM counter`, (err, row) => {
+            this.db.get(`SELECT ${command}_counter FROM ${command}`, (err, row) => {
                 if (err) {
                     reject(err.message);
                     return;
