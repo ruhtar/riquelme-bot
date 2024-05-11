@@ -4,11 +4,22 @@ import { Repository } from "../database/repository";
 export class VoiceTimeManager {
     private startTimePerUser = new Map<string, number>();
 
-    public async getTotalTimeInVoice(message: Message){
+    public async getUserTotalTimeInVoice(message: Message, userId: string){
+      const repository = new Repository();
+      const totalTime = await repository.getTimeInVoiceByUserId(userId);
+
+      this.replyTotalTimeMessage(totalTime, message);
+    }
+
+    public async getSelfTotalTimeInVoice(message: Message){
       const userId = message.author.id;
       const repository = new Repository();
       const totalTime = await repository.getTimeInVoiceByUserId(userId);
 
+      this.replyTotalTimeMessage(totalTime, message);
+    }
+
+    private replyTotalTimeMessage(totalTime : number | null, message: Message){
       if(!totalTime) {
         message.reply(`Você passou um total de 0 horas, 0 minutos e 0 segundos em chamadas de voz.`);
         return;

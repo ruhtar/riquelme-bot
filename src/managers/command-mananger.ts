@@ -22,9 +22,19 @@ export class CommandManager{
 
         if (command.toLowerCase() === "voice") {
             const voiceTimeManager = new VoiceTimeManager();
-            await voiceTimeManager.getTotalTimeInVoice(message);
+            await voiceTimeManager.getSelfTotalTimeInVoice(message);
+        }
+        
+        if (/voice <@\d+>/.test(command)) {
+            console.log('command',command)
+            const voiceTimeManager = new VoiceTimeManager();
+            const userIdRegex = /<@(\d+)>/;
+            const userIdMatch = message.content.match(userIdRegex);
+            if (userIdMatch) {
+                const userId = userIdMatch[1]; 
+                console.log("User ID:", userId);
+                await voiceTimeManager.getUserTotalTimeInVoice(message, userId);
+            }
         }
     }
-
-
 }
