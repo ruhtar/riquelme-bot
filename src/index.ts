@@ -1,7 +1,4 @@
-export { client };
-
-
-
+  export { client };
   import { TextChannel } from "discord.js";
   import * as dotenv from "dotenv";
   import schedule from 'node-schedule';
@@ -16,7 +13,7 @@ dotenv.config();
 const client = new ExtendedClient();
 
 new DatabaseInitializer();
-const commandHandler = new CommandManager();
+const commandManager = new CommandManager();
 
 client.start();
 const voiceTimeManager = new VoiceTimeManager();
@@ -66,7 +63,7 @@ client.on("messageCreate", async (message) => {
 
   if (content.startsWith("!")) {
       const command = content.slice(1).toLowerCase();
-      await commandHandler.handleCommand(message, command);
+      await commandManager.handleCommand(message, command);
   }
 });
 
@@ -74,6 +71,8 @@ client.on("messageCreate", async (message) => {
 
 client.on("ready", () => {
   checkBirthday()
+
+  console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô")
 
   // const channelId = process.env.CHANNEL_ID;
 

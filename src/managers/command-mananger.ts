@@ -14,8 +14,7 @@ export class CommandManager{
             replyMessage(message, command, counter);
         }
 
-        if(command.toLowerCase() === "comandos")
-        {
+        if(command.toLowerCase() === "comandos"){
             const listaComandos = counterCommandsList.join("\n");
             message.reply("Tá aqui sua lista de comandos, aviãozeiro:\n" + listaComandos);
         }
@@ -26,7 +25,6 @@ export class CommandManager{
         }
         
         if (/voice <@\d+>/.test(command)) {
-            console.log('command',command)
             const voiceTimeManager = new VoiceTimeManager();
             const userIdRegex = /<@(\d+)>/;
             const userIdMatch = message.content.match(userIdRegex);

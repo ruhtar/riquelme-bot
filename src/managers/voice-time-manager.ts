@@ -1,4 +1,5 @@
 import { Message, VoiceState } from "discord.js";
+import { client } from "..";
 import { Repository } from "../database/repository";
 
 export class VoiceTimeManager {
@@ -7,8 +8,11 @@ export class VoiceTimeManager {
     public async getUserTotalTimeInVoice(message: Message, userId: string){
       const repository = new Repository();
       const totalTime = await repository.getTimeInVoiceByUserId(userId);
+      const user = client.users.cache.find((user) => user.id === userId);
+      if(!user) return;
+      const userDisplayName = user.displayName;
 
-      this.replyTotalTimeMessage(totalTime, message);
+      this.replyTotalTimeMessage(totalTime, message, userDisplayName);
     }
 
     public async getSelfTotalTimeInVoice(message: Message){
@@ -16,12 +20,12 @@ export class VoiceTimeManager {
       const repository = new Repository();
       const totalTime = await repository.getTimeInVoiceByUserId(userId);
 
-      this.replyTotalTimeMessage(totalTime, message);
+      this.replyTotalTimeMessage(totalTime, message, message.author.displayName);
     }
 
-    private replyTotalTimeMessage(totalTime : number | null, message: Message){
+    private replyTotalTimeMessage(totalTime: number | null, message: Message, displayName: string){
       if(!totalTime) {
-        message.reply(`Você passou um total de 0 horas, 0 minutos e 0 segundos em chamadas de voz.`);
+        message.reply(`${displayName} passou um total de 0 horas, 0 minutos e 0 segundos em chamadas de voz.`);
         return;
       }
 
@@ -29,7 +33,7 @@ export class VoiceTimeManager {
       const minutes = Math.floor((totalTime % 3600) / 60);
       const seconds = totalTime % 60;
 
-      message.reply(`Você passou um total de ${hours} horas, ${minutes} minutos e ${seconds} segundos em chamadas de voz.`);
+      message.reply(`${displayName} passou um total de ${hours} horas, ${minutes} minutos e ${seconds} segundos em chamadas de voz.`);
     }
 
     public async CountUsersTimeOnVoice(oldState: VoiceState, newState: VoiceState){
@@ -39,7 +43,7 @@ export class VoiceTimeManager {
       
         if (newState.channel && userId && !oldState.channel) {
           // Entrou em um canal
-          console.log("Entrou em um canal");
+          console.log(`${member.displayName} entrou em um canal`);
       
           this.startTimePerUser.set(userId, Math.floor(Date.now() / 1000));
           const totalTime = await repository.getTimeInVoiceByUserId(userId)
@@ -53,7 +57,7 @@ export class VoiceTimeManager {
       
         if (oldState.channel && userId && !newState.channel) {
           // Saiu de um canal
-          console.log("Saiu do canal");
+          console.log(`${member.displayName} saiu do canal`);
           
           const endTime = Math.floor(Date.now() / 1000); // Converte para segundos
           //   let startTime = await databaseManager.getVoiceTimeByUserId(userId);
