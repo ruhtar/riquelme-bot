@@ -1,4 +1,3 @@
-export * from "colors";
 export { client };
 
 
@@ -76,16 +75,16 @@ client.on("messageCreate", async (message) => {
 client.on("ready", () => {
   checkBirthday()
 
-  const channelId = process.env.CHANNEL_ID;
+  // const channelId = process.env.CHANNEL_ID;
 
-  if(!channelId) return;
+  // if(!channelId) return;
 
-  const channel = client.channels.cache.get(channelId);
+  // const channel = client.channels.cache.get(channelId);
 
-  if(!channel) return;
+  // if(!channel) return;
 
-  (channel as TextChannel).send({ content: "Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô" })
-  .catch(err => { 
-    console.error(err);
-  });
+  // (channel as TextChannel).send({ content: "Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô" })
+  // .catch(err => { 
+  //   console.error(err);
+  // });
 });
