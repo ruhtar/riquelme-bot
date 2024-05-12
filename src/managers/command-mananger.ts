@@ -1,4 +1,8 @@
-import { VoiceConnection, VoiceConnectionStatus, createAudioPlayer, entersState, joinVoiceChannel } from '@discordjs/voice';
+import {
+    AudioPlayer, AudioPlayerStatus, StreamType, VoiceConnection,
+    VoiceConnectionStatus, createAudioPlayer, createAudioResource,
+    entersState, joinVoiceChannel
+} from '@discordjs/voice';
 import { Message, VoiceBasedChannel } from "discord.js";
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
@@ -28,13 +32,17 @@ export class CommandManager{
 
             connection.subscribe(player);
             await message.reply("QUEEEBRAAAA")
-            // // subscription could be undefined if the connection is destroyed!
-            // if (subscription) {
-            //     // Unsubscribe after 5 seconds (stop playing audio on the voice connection)
-            //     setTimeout(() => subscription.unsubscribe(), 5_000);
-            // }
-            
-            // if(connection) connection.destroy();
+            try {
+                console.log('Song is ready to play!');
+                this.playSong(player);
+            } catch (error) {
+                /**
+                 * The song isn't ready to play for some reason :(
+                 */
+                console.error(error);
+            }finally{
+                // if(connection) connection.destroy();
+            }
         }
 
         if(command.toLowerCase() === "comandos"){
@@ -58,6 +66,36 @@ export class CommandManager{
             }
         }
     }
+
+    private async playSong(player: AudioPlayer) {
+        /**
+         * Here we are creating an audio resource using a sample song freely available online
+         * (see https://www.soundhelix.com/audio-examples)
+         *
+         * We specify an arbitrary inputType. This means that we aren't too sure what the format of
+         * the input is, and that we'd like to have this converted into a format we can use. If we
+         * were using an Ogg or WebM source, then we could change this value. However, for now we
+         * will leave this as arbitrary.
+         */
+        const resource = createAudioResource('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', {
+            inputType: StreamType.Arbitrary,
+        });
+    
+        /**
+         * We will now play this to the audio player. By default, the audio player will not play until
+         * at least one voice connection is subscribed to it, so it is fine to attach our resource to the
+         * audio player this early.
+         */
+        player.play(resource);
+    
+        /**
+         * Here we are using a helper function. It will resolve if the player enters the Playing
+         * state within 5 seconds, otherwise it will reject with an error.
+         */
+        return entersState(player, AudioPlayerStatus.Playing, 5000);
+    }
+
+
     private async connectToChannel(channel: VoiceBasedChannel): Promise<VoiceConnection>{
         const connection = joinVoiceChannel({
             channelId: channel.id,

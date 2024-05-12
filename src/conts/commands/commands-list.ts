@@ -6,4 +6,5 @@ export const counterCommandsList: string[] =
 "fakenews", 
 "flash",
 "flau", 
-"minorias"];
+"minorias",
+"overheat"];

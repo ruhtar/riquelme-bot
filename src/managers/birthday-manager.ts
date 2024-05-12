@@ -19,18 +19,19 @@ export const checkBirthday = () => {
   
             if(!channel) return;
   
-            const randomIndex = Math.floor(Math.random() * parabens.length);
-            const mensagemAleatoria = parabens[randomIndex];
-
+            
             (channel as TextChannel).send({
-            content: `# 🎉🌟🥳🎈 **Hoje é aniversário de ${pessoa}!** 🎂🎊🎁 **Parabéns!** 🎉🥳🌟🎈`,
-            // Você pode adicionar mais formatação ou emojis animados aqui
+              content: `# 🎉🌟🥳🎈 **Hoje é aniversário de ${pessoa}!** 🎂🎊🎁 **Parabéns!** 🎉🥳🌟🎈`,
             })
             .catch(err => { 
-            console.error(err);
+              console.error(err);
             });
-  
-            (channel as TextChannel).send({ content: mensagemAleatoria })
+            
+            const randomIndex = Math.floor(Math.random() * parabens.length);
+            const mensagemAleatoria = parabens[randomIndex];
+            
+            (channel as TextChannel).send({ 
+              content: mensagemAleatoria })
             .catch(err => { 
               console.error(err);
             });
