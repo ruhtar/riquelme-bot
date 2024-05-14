@@ -7,15 +7,14 @@ import { Message, VoiceBasedChannel } from "discord.js";
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { Repository } from "../database/repository";
-import { getCurrentMonthAndYear } from '../utils/actual-month';
 import { VoiceTimeManager } from "./voice-time-manager";
 
 export class CommandManager{
     public async handleCommand(message: Message, command: string) {
         if(counterCommandsList.includes(command.toLowerCase())){
             const repository = new Repository();
-            repository.insertCommand(command, message.author.id, getCurrentMonthAndYear());
-            var counterObject = await repository.getCommandCounter(message.author.id, command, getCurrentMonthAndYear());
+            repository.insertCommand(command, message.author.id);
+            var counterObject = await repository.getCommandCounter(command);
             var counter = Object.values(counterObject)[0];
             replyMessage(message, command, counter);
             return;

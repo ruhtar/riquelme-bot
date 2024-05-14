@@ -1,7 +1,6 @@
 import { Message, VoiceState } from "discord.js";
 import { client } from "..";
 import { Repository } from "../database/repository";
-import { getCurrentMonthAndYear } from "../utils/actual-month";
 
 export class VoiceTimeManager {
     private startTimePerUser = new Map<string, number>();
@@ -71,7 +70,7 @@ export class VoiceTimeManager {
           const timeInVoiceToAdd = endTime - startTime;
           if(!timeInVoiceToAdd) return;
           
-          repository.saveTotalVoiceTimeToDatabase(userId, timeInVoiceToAdd, getCurrentMonthAndYear());
+          repository.saveTotalVoiceTimeToDatabase(userId, timeInVoiceToAdd);
           this.startTimePerUser.set(userId, 0); //reset
         }
     }

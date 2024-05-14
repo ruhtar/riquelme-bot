@@ -11,11 +11,11 @@ export class Repository{
             }
         });
     }
-    public insertCommand(command: string, userId: string, date: string){
+    public insertCommand(command: string, userId: string, date: string = getCurrentMonthAndYear()){
         this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }
 
-    public getCommandCounter(userId: string = "", command: string, date: string = "") : any { //yes, i know, judge me
+    public getCommandCounter(command: string, userId: string = "", date: string = getCurrentMonthAndYear()) : any { //yes, i know, judge me
         let query = 'SELECT COUNT(*) AS count FROM commands WHERE command = ?';
 
         if (userId !== "") {
@@ -55,7 +55,7 @@ export class Repository{
         });
     }
 
-    public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number, date: string) {
+    public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number, date: string = getCurrentMonthAndYear()) {
         this.db.run(`
             INSERT INTO time_in_voice (user_id, total_time, date)
             VALUES (?, ?, ?)
