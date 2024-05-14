@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+import { getCurrentMonthAndYear } from "../utils/actual-month";
 
 export class Repository{
     public db: sqlite3.Database;
@@ -10,51 +11,54 @@ export class Repository{
             }
         });
     }
-    public incrementCommandCounter(command: string){
-        const stmt = this.db.prepare(`UPDATE ${command} SET ${command}_counter = ${command}_counter + 1`);
-        stmt.run();
-        stmt.finalize();
+    public insertCommand(command: string, userId: string, date: string){
+        this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }
 
-    public getCommandCounter(command: string) : any { //yes, i know, judge me
+    public getCommandCounter(userId: string = "", command: string, date: string = "") : any { //yes, i know, judge me
+        let query = 'SELECT COUNT(*) AS count FROM commands WHERE command = ?';
+
+        if (userId !== "") {
+            query += ' AND user_id = ?';
+        }
+
+        if (date !== "") {
+            query += ' AND date = ?';
+        }
+
         return new Promise((resolve, reject) => {
-            this.db.get(`SELECT ${command}_counter FROM ${command}`, (err, row) => {
+            this.db.get(query, [command, userId, date], (err, row) => {
                 if (err) {
                     reject(err.message);
                     return;
-                }
-                if (row) {
-                    resolve(row);
-                } else {
-                    resolve(null); 
-                }
-            });
-        })
-    }
+                } 
 
-    public getTimeInVoiceByUserId(userId: string): Promise<number | null> {
-        //A consulta ao SQLite deve ser feita de maneira assíncrona, por isso preciso retornar uma Promise
-        // **Li que a maneira correta é lidar com os callbacks, mas ficaria horrível, melhor usar Promise mesmo
-        return new Promise((resolve, reject) => {
-            this.db.get(`SELECT total_time FROM time_in_voice WHERE user_id = ?`, [userId], (err, row: { total_time: number }) => {
-                if (err) {
-                    reject(err.message);
-                    return;
-                }
-    
-                if (row && row.total_time) {
-                    resolve(row.total_time);
-                } else {
+                if (row){
+                    resolve(row)
+                } else{
                     resolve(null); 
                 }
             });
         });
     }
 
-    public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number) {
+    public getUsersTimeInVoiceByDate(userId: string, date: string = getCurrentMonthAndYear()): Promise<number | null> {
+        return new Promise((resolve, reject) => {
+            this.db.get(`SELECT SUM(total_time) AS total_time FROM time_in_voice WHERE user_id = ? AND date = ?`, [userId, date], (err, row: { total_time: number }) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                }
+    
+                resolve(row ? row.total_time : null);
+            });
+        });
+    }
+
+    public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number, date: string) {
         this.db.run(`
-            INSERT OR REPLACE INTO time_in_voice (user_id, total_time)
-            VALUES (?, ?)
-        `, [userId, totalVoiceTime]);
+            INSERT INTO time_in_voice (user_id, total_time, date)
+            VALUES (?, ?, ?)
+        `, [userId, totalVoiceTime, date]);
     }
 }

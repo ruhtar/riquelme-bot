@@ -1,5 +1,4 @@
 import sqlite3 from "sqlite3";
-import { counterCommandsList } from "../conts/commands/commands-list";
 
 export class DatabaseInitializer{
     public db: sqlite3.Database;
@@ -17,35 +16,24 @@ export class DatabaseInitializer{
             }
         });
     }
-    private createCommandsTables() {
-        counterCommandsList.forEach((command) => {
-            this.db.run(`
-            CREATE TABLE IF NOT EXISTS ${command} (
-                id TEXT PRIMARY KEY,
-                ${command}_counter INTEGER DEFAULT NULL
-            )
-            `);
-
-            this.insertZeroCounters(command)
-        })
-    }
-
-    private insertZeroCounters(command: string) {
-        this.db.get(`SELECT * FROM ${command} WHERE id = 'default'`, (err, row) => {
-            if (!row) {
-                this.db.run(`
-                    INSERT INTO ${command} (id, ${command}_counter)
-                    VALUES ('default', 0)
-                `);
-            }
-        });
+    private createCommandsTables(){
+        this.db.run(`
+        CREATE TABLE IF NOT EXISTS commands (
+            id INTEGER PRIMARY KEY AUTOINCREMENT , 
+            user_id TEXT,
+            command TEXT DEFAULT NULL,
+            date TEXT
+        )
+        `);
     }
 
     private createTimeInVoiceTable() {
         this.db.run(`
             CREATE TABLE IF NOT EXISTS time_in_voice (
-                user_id TEXT PRIMARY KEY,
-                total_time INTEGER
+                id INTEGER PRIMARY KEY AUTOINCREMENT , 
+                user_id TEXT,
+                total_time INTEGER,
+                date TEXT
             )
         `);
     }

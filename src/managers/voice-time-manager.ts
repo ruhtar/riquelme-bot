@@ -1,13 +1,14 @@
 import { Message, VoiceState } from "discord.js";
 import { client } from "..";
 import { Repository } from "../database/repository";
+import { getCurrentMonthAndYear } from "../utils/actual-month";
 
 export class VoiceTimeManager {
     private startTimePerUser = new Map<string, number>();
 
     public async getUserTotalTimeInVoice(message: Message, userId: string){
       const repository = new Repository();
-      const totalTime = await repository.getTimeInVoiceByUserId(userId);
+      const totalTime = await repository.getUsersTimeInVoiceByDate(userId);
       const user = client.users.cache.find((user) => user.id === userId);
       if(!user) return;
       const userDisplayName = user.displayName;
@@ -18,7 +19,7 @@ export class VoiceTimeManager {
     public async getSelfTotalTimeInVoice(message: Message){
       const userId = message.author.id;
       const repository = new Repository();
-      const totalTime = await repository.getTimeInVoiceByUserId(userId);
+      const totalTime = await repository.getUsersTimeInVoiceByDate(userId);
 
       this.replyTotalTimeMessage(totalTime, message, message.author.displayName);
     }
@@ -46,13 +47,13 @@ export class VoiceTimeManager {
           console.log(`${member.displayName} entrou em um canal`);
       
           this.startTimePerUser.set(userId, Math.floor(Date.now() / 1000));
-          const totalTime = await repository.getTimeInVoiceByUserId(userId)
-          if (!totalTime) { 
-            // Se o usuário não estava em um canal antes, inicializa o tempo
-            // TODO: Alterar para que ele puxe do SQLite o tempo ao inves de ficar guardando em memória. 
-            // this.voiceTime.set(userId, 0);
-            repository.saveTotalVoiceTimeToDatabase(userId, 0)
-          }
+          // const totalTime = await repository.getTimeInVoiceByUserId(userId)
+          // if (!totalTime) { 
+          //   // Se o usuário não estava em um canal antes, inicializa o tempo
+          //   // TODO: Alterar para que ele puxe do SQLite o tempo ao inves de ficar guardando em memória. 
+          //   // this.voiceTime.set(userId, 0);
+          //   repository.saveTotalVoiceTimeToDatabase(userId, 0, getCurrentMonthAndYear())
+          // }
         }
       
         if (oldState.channel && userId && !newState.channel) {
@@ -70,11 +71,11 @@ export class VoiceTimeManager {
           const timeInVoiceToAdd = endTime - startTime;
           if(!timeInVoiceToAdd) return;
       
-          const oldVoiceTime =  await repository.getTimeInVoiceByUserId(userId);
+          const oldVoiceTime =  await repository.getUsersTimeInVoiceByDate(userId);
       
           const newVoiceTime = oldVoiceTime! + timeInVoiceToAdd;
           
-          repository.saveTotalVoiceTimeToDatabase(userId, newVoiceTime);
+          repository.saveTotalVoiceTimeToDatabase(userId, newVoiceTime, getCurrentMonthAndYear());
           this.startTimePerUser.set(userId, 0); //reset
         }
     }
