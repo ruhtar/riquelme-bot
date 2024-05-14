@@ -70,12 +70,8 @@ export class VoiceTimeManager {
       
           const timeInVoiceToAdd = endTime - startTime;
           if(!timeInVoiceToAdd) return;
-      
-          const oldVoiceTime =  await repository.getUsersTimeInVoiceByDate(userId);
-      
-          const newVoiceTime = oldVoiceTime! + timeInVoiceToAdd;
           
-          repository.saveTotalVoiceTimeToDatabase(userId, newVoiceTime, getCurrentMonthAndYear());
+          repository.saveTotalVoiceTimeToDatabase(userId, timeInVoiceToAdd, getCurrentMonthAndYear());
           this.startTimePerUser.set(userId, 0); //reset
         }
     }
