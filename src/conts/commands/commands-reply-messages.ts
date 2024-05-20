@@ -2,6 +2,9 @@ import { Message } from "discord.js";
 
 export const replyMessage = (message: Message, command: string, counter: unknown) => {
     switch (command) {
+        case "fantasma":
+            message.reply(`Parece que mais uma pessoa foi assolada pelo fantasma do hardware. Agora são: ${counter}`)
+            break;  
         case "overheat":
             message.reply(`Já foram ${counter} jogos churrascados em overheat.`)
             break;  

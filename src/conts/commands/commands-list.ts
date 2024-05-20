@@ -7,4 +7,5 @@ export const counterCommandsList: string[] =
 "flash",
 "flau", 
 "minorias",
-"overheat"];
+"overheat",
+"fantasma"];

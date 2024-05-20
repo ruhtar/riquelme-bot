@@ -15,19 +15,23 @@ export class Repository{
         this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }
 
-    public getCommandCounter(command: string, userId: string = "", date: string = getCurrentMonthAndYear()) : any { //yes, i know, judge me
+    public getCommandCounter(command: string, userId: string = "", date: string = "") : any { //yes, i know, judge me
         let query = 'SELECT COUNT(*) AS count FROM commands WHERE command = ?';
+
+        let params = [command];
 
         if (userId !== "") {
             query += ' AND user_id = ?';
+            params.push(userId);
         }
-
+        
         if (date !== "") {
             query += ' AND date = ?';
+            params.push(date);
         }
 
         return new Promise((resolve, reject) => {
-            this.db.get(query, [command, userId, date], (err, row) => {
+            this.db.get(query, params, (err, row) => { //[command, userId, date]
                 if (err) {
                     reject(err.message);
                     return;

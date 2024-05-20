@@ -14,8 +14,10 @@ export class CommandManager{
         if(counterCommandsList.includes(command.toLowerCase())){
             const repository = new Repository();
             repository.insertCommand(command, message.author.id);
+           console.log(' deu insert', )
             var counterObject = await repository.getCommandCounter(command);
             var counter = Object.values(counterObject)[0];
+            console.log('counter',counter)
             replyMessage(message, command, counter);
             return;
         }
