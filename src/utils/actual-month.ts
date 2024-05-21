@@ -5,7 +5,7 @@ export const getCurrentMonthAndYear = () => {
     return `${mes}-${ano}`;
 }
 
-export const obterMesAnterior = (): string => {
+export const getPreviousMonthAndYear = (): string => {
     const dataAtual = new Date();
     let mes: number = dataAtual.getMonth();
     let ano: number = dataAtual.getFullYear(); 
