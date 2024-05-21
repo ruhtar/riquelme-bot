@@ -7,7 +7,8 @@
     "dev": "nodemon --watch 'src/' --exec ts-node src/index.ts -e ts",
     "dev2": "ts-node src/index.ts",
     "build": "tsc",
-    "start": "tsc && node ."
+    "start1": "tsc && node .",
+    "start": "nodemon --watch 'src/' --exec ts-node src/index.ts -e ts"
   },
   "keywords": [],
   "author": "",
