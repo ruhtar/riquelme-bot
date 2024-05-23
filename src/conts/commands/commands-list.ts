@@ -9,4 +9,6 @@ export const counterCommandsList: string[] =
 "minorias",
 "overheat",
 "fantasma",
-"quorum"];
+"quorum",
+"putaria",
+"arroto"];

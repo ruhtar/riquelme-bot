@@ -2,6 +2,15 @@ import { Message } from "discord.js";
 
 export const replyMessage = (message: Message, command: string, counter: unknown) => {
     switch (command) {
+        case "arroto":
+            message.reply(`${counter} argômitos e subindo`)
+            break;  
+        case "putaria":
+            message.reply(`JÁ FALARAM ${counter} PUTARIAS UUIIIIIIIIIIIIIIIIIIIIIIIIII SEXOOOOOOOOOOOOOOOO`)
+            break;  
+        case "quorum":
+            message.reply(`hj n teve quorum :( dia n°${counter}`)
+            break;  
         case "fantasma":
             message.reply(`Parece que mais uma pessoa foi assolada pelo fantasma do hardware. Agora são: ${counter}`)
             break;  
