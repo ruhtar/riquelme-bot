@@ -4,6 +4,7 @@ import {
     entersState, joinVoiceChannel
 } from '@discordjs/voice';
 import { Message, VoiceBasedChannel } from "discord.js";
+import ytdl from 'ytdl-core';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { Repository } from "../database/repository";
@@ -34,7 +35,7 @@ export class CommandManager{
             await message.reply("QUEEEBRAAAA")
             try {
                 console.log('Song is ready to play!');
-                this.playSong(player);
+                this.playSong(player, "https://www.youtube.com/watch?v=aG-qqoH1hFM");
             } catch (error) {
                 /**
                  * The song isn't ready to play for some reason :(
@@ -67,7 +68,7 @@ export class CommandManager{
         }
     }
 
-    private async playSong(player: AudioPlayer) {
+    private async playSong(player: AudioPlayer, url: string) {
         /**
          * Here we are creating an audio resource using a sample song freely available online
          * (see https://www.soundhelix.com/audio-examples)
@@ -77,7 +78,14 @@ export class CommandManager{
          * were using an Ogg or WebM source, then we could change this value. However, for now we
          * will leave this as arbitrary.
          */
-        const resource = createAudioResource('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', {
+        const stream = ytdl(url, {
+            filter: 'audioonly',
+            quality: 'highestaudio',
+            highWaterMark: 1 << 25 // Aumenta o buffer de água para evitar interrupções
+        });
+
+    
+        const resource = createAudioResource(stream, {
             inputType: StreamType.Arbitrary,
         });
     
@@ -94,7 +102,6 @@ export class CommandManager{
          */
         return entersState(player, AudioPlayerStatus.Playing, 5000);
     }
-
 
     private async connectToChannel(channel: VoiceBasedChannel): Promise<VoiceConnection>{
         const connection = joinVoiceChannel({
