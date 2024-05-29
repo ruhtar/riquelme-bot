@@ -35,7 +35,7 @@ export class CommandManager{
             await message.reply("QUEEEBRAAAA")
             try {
                 console.log('Song is ready to play!');
-                this.playSong(player, "https://www.youtube.com/watch?v=aG-qqoH1hFM");
+                this.playSong(player, "https://www.youtube.com/watch?v=4ndwm1S59sg");
             } catch (error) {
                 /**
                  * The song isn't ready to play for some reason :(
