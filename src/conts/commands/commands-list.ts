@@ -1,14 +1,14 @@
-export const counterCommandsList: string[] = 
-["darkleo", 
-"laele", 
-"lanchinho", 
-"safadeza", 
-"fakenews", 
-"flash",
-"flau", 
-"minorias",
-"overheat",
-"fantasma",
-"quorum",
-"putaria",
-"arroto"];
+export const counterCommandsList: string[] =
+    ["darkleo",
+        "laele",
+        "lanchinho",
+        "safadeza",
+        "fakenews",
+        "flash",
+        "flau",
+        "minorias",
+        "overheat",
+        "fantasma",
+        "quorum",
+        "putaria",
+        "arroto"];

@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 
-export class DatabaseInitializer{
+export class DatabaseInitializer {
     public db: sqlite3.Database;
 
     constructor() {
@@ -9,14 +9,14 @@ export class DatabaseInitializer{
                 console.error("Erro ao conectar ao banco de dados:", err.message);
             } else {
                 console.log("Conectado ao banco de dados SQLite");
-                this.db.serialize(()=>{
+                this.db.serialize(() => {
                     this.createTimeInVoiceTable();
                     this.createCommandsTables();
                 });
             }
         });
     }
-    private createCommandsTables(){
+    private createCommandsTables() {
         this.db.run(`
         CREATE TABLE IF NOT EXISTS commands (
             id INTEGER PRIMARY KEY AUTOINCREMENT , 

@@ -5,7 +5,7 @@ dotenv.config();
 
 //Configure os Intents -> São as permissões que o Cliente precisa ter para interagir com determinados eventos.
 export class ExtendedClient extends Client {
-    constructor(){
+    constructor() {
         super({
             intents: Object.keys(IntentsBitField.Flags) as BitFieldResolvable<GatewayIntentsString, number>,
             partials: [
@@ -15,7 +15,7 @@ export class ExtendedClient extends Client {
         })
     }
 
-    public start(){
+    public start() {
         this.login(process.env.BOT_TOKEN)
     }
 }

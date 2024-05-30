@@ -11,9 +11,9 @@ import { getRandomUrl } from '../conts/videos/videos-list';
 import { Repository } from "../database/repository";
 import { VoiceTimeManager } from "./voice-time-manager";
 
-export class CommandManager{
+export class CommandManager {
     public async handleCommand(message: Message, command: string) {
-        if(counterCommandsList.includes(command.toLowerCase())){
+        if (counterCommandsList.includes(command.toLowerCase())) {
             const repository = new Repository();
             repository.insertCommand(command, message.author.id);
             var counterObject = await repository.getCommandCounter(command);
@@ -25,7 +25,7 @@ export class CommandManager{
         if (command.toLowerCase() === 'riquelme') {
             const voiceChannel = message.member?.voice.channel;
             if (!voiceChannel) {
-                return message.reply('Cê tem que estar em um canal de voz pra isso seu cabaço');
+                return message.reply('Cê tem que tá em um canal de voz pra isso seu cabaço');
             }
             try {
                 const connection = await this.connectToChannel(voiceChannel)
@@ -46,7 +46,7 @@ export class CommandManager{
             }
         }
 
-        if(command.toLowerCase() === "comandos"){
+        if (command.toLowerCase() === "comandos") {
             const listaComandos = counterCommandsList.join("\n");
             message.reply("Tá aqui sua lista de comandos, aviãozeiro:\n" + listaComandos);
         }
@@ -55,13 +55,13 @@ export class CommandManager{
             const voiceTimeManager = new VoiceTimeManager();
             await voiceTimeManager.getSelfTotalTimeInVoice(message);
         }
-        
+
         if (/voice <@\d+>/.test(command)) {
             const voiceTimeManager = new VoiceTimeManager();
             const userIdRegex = /<@(\d+)>/;
             const userIdMatch = message.content.match(userIdRegex);
             if (userIdMatch) {
-                const userId = userIdMatch[1]; 
+                const userId = userIdMatch[1];
                 console.log("User ID:", userId);
                 await voiceTimeManager.getUserTotalTimeInVoice(message, userId);
             }
@@ -84,18 +84,18 @@ export class CommandManager{
             highWaterMark: 1 << 25 // Aumenta o buffer de água para evitar interrupções
         });
 
-    
+
         const resource = createAudioResource(stream, {
             inputType: StreamType.Arbitrary,
         });
-    
+
         /**
          * We will now play this to the audio player. By default, the audio player will not play until
          * at least one voice connection is subscribed to it, so it is fine to attach our resource to the
          * audio player this early.
          */
         player.play(resource);
-    
+
         /**
          * Here we are using a helper function. It will resolve if the player enters the Playing
          * state within 5 seconds, otherwise it will reject with an error.
@@ -103,13 +103,13 @@ export class CommandManager{
         return entersState(player, AudioPlayerStatus.Playing, 5000);
     }
 
-    private async connectToChannel(channel: VoiceBasedChannel): Promise<VoiceConnection>{
+    private async connectToChannel(channel: VoiceBasedChannel): Promise<VoiceConnection> {
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
             adapterCreator: channel.guild.voiceAdapterCreator,
         });
-    
+
         try {
             await entersState(connection, VoiceConnectionStatus.Ready, 30_000);
             return connection;

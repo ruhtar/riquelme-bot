@@ -1,4 +1,4 @@
-export const birthdays : Aniversarios = {
+export const birthdays: Aniversarios = {
     "Leossamp": "01-12",
     "Tucaleleo": "09-23",
     "Augustão of shadows": "12-27",
