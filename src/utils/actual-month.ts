@@ -5,6 +5,14 @@ export const getCurrentMonthAndYear = () => {
     return `${mes}-${ano}`;
 }
 
+export const getCurrentMonthName = () => {
+    const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const dataAtual = new Date();
+    const nomeMes = months[dataAtual.getMonth()];
+    return nomeMes;
+}
+
+
 export const getPreviousMonthAndYear = (): string => {
     const dataAtual = new Date();
     let mes: number = dataAtual.getMonth();

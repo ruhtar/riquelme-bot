@@ -9,6 +9,7 @@ import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { getRandomUrl } from '../conts/videos/videos-list';
 import { Repository } from "../database/repository";
+import { generateReport } from './report-manager';
 import { VoiceTimeManager } from "./voice-time-manager";
 
 export class CommandManager {
@@ -20,6 +21,11 @@ export class CommandManager {
             var counter = Object.values(counterObject)[0];
             replyMessage(message, command, counter);
             return;
+        }
+
+        if (command.toLowerCase() === 'teste') {
+
+            generateReport();
         }
 
         if (command.toLowerCase() === 'riquelme') {

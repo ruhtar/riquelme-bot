@@ -2,12 +2,10 @@ import { TextChannel } from "discord.js";
 import { client } from "..";
 import { parabens } from "../conts/birthday/birthday-reply-messages";
 import { birthdays } from "../conts/birthday/birthdays-list";
+import { getCurrentMonthAndYear } from "../utils/actual-month";
 
 export const checkBirthday = () => {
-  const hoje: Date = new Date();
-  const dia: number = hoje.getDate();
-  const mes: number = hoje.getMonth() + 1; // Lembrando que o mês é base 0 (janeiro é 0)
-  const dataHoje: string = `${mes.toString().padStart(2, '0')}-${dia.toString().padStart(2, '0')}`;
+  const dataHoje: string = getCurrentMonthAndYear();
 
   for (const pessoa in birthdays) {
     if (birthdays[pessoa] === dataHoje) {

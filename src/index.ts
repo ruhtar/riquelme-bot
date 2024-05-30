@@ -38,7 +38,7 @@ schedule.scheduleJob('0 0 1 * *', function () {
   generateReport();
 });
 
-generateReport(); //EXCLUIR!!!!!!!!!!!!
+//trocar a varivel de ambiente!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 client.on('voiceStateUpdate', (oldState, newState) => {
   voiceTimeManager.CountUsersTimeOnVoice(oldState, newState);
