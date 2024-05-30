@@ -45,11 +45,9 @@ export class CommandManager {
                 await message.reply("QUEEEEEEEEEEBRAAAAAAA")
 
                 player.on(AudioPlayerStatus.Idle, () => {
-                    console.log('Song has finished playing!');
                     connection.destroy();
                 });
 
-                console.log('Song is ready to play!');
                 this.playSong(player, getRandomUrl());
             } catch (error) {
                 console.error(error);
@@ -72,7 +70,6 @@ export class CommandManager {
             const userIdMatch = message.content.match(userIdRegex);
             if (userIdMatch) {
                 const userId = userIdMatch[1];
-                console.log("User ID:", userId);
                 await voiceTimeManager.getUserTotalTimeInVoice(message, userId);
             }
         }

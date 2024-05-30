@@ -57,20 +57,5 @@ client.on("messageCreate", async (message) => {
 });
 
 client.on("ready", async () => {
-  checkBirthday()
-
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô")
-
-  // const channelId = process.env.CHANNEL_ID;
-
-  // if(!channelId) return;
-
-  // const channel = client.channels.cache.get(channelId);
-
-  // if(!channel) return;
-
-  // (channel as TextChannel).send({ content: "Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô" })
-  // .catch(err => { 
-  //   console.error(err);
-  // });
 });

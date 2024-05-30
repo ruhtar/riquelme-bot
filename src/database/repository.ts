@@ -32,7 +32,7 @@ export class Repository {
         }
 
         return new Promise((resolve, reject) => {
-            this.db.get(query, params, (err, row) => { //[command, userId, date]
+            this.db.get(query, params, (err, row) => {
                 if (err) {
                     reject(err.message);
                     return;
@@ -99,6 +99,7 @@ export class Repository {
             });
         });
     }
+    
     public getTopActiveUsersByMonthAndYear(date: string | null = null, top: boolean = true): Promise<any> {
         let query = `
         SELECT user_id, SUM(total_time) AS totalTime
@@ -135,7 +136,6 @@ export class Repository {
             });
         });
     }
-    
 }
 export interface CommandCount {
     command: string;
