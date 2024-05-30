@@ -17,7 +17,6 @@ export const checkBirthday = () => {
 
       if (!channel) return;
 
-
       (channel as TextChannel).send({
         content: `# 🎉🌟🥳🎈 **Hoje é aniversário de ${pessoa}!** 🎂🎊🎁 **Parabéns!** 🎉🥳🌟🎈`,
       })

@@ -12,6 +12,16 @@ import { Repository } from "../database/repository";
 import { VoiceTimeManager } from "./voice-time-manager";
 
 export class CommandManager {
+    public async consultarComando(message: Message, command: string, data: string= ""){
+        if (counterCommandsList.includes(command.toLowerCase())) {
+            const repository = new Repository();
+            var counterObject = await repository.getCommandCounter(command, "", data);
+            var counter = Object.values(counterObject)[0];
+            replyMessage(message, command, counter);
+            return;
+        }
+    }
+
     public async handleCommand(message: Message, command: string) {
         if (counterCommandsList.includes(command.toLowerCase())) {
             const repository = new Repository();
