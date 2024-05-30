@@ -99,39 +99,43 @@ export class Repository {
             });
         });
     }
-
-    public getTopActiveUsersByMonthAndYear(date: string | null = null): Promise<any> {
+    public getTopActiveUsersByMonthAndYear(date: string | null = null, top: boolean = true): Promise<any> {
         let query = `
         SELECT user_id, SUM(total_time) AS totalTime
         FROM time_in_voice
         `;
-    
+        
         const params: any[] = [];
-    
+        
         if (date) {
             query += `
-            WHERE date = ?
+            WHERE date = ? AND user_id != 973751803860639774
             `;
             params.push(date);
+        }else{
+            query += `
+            WHERE user_id != 973751803860639774
+            `;
         }
-    
+        
         query += `
         GROUP BY user_id
-        ORDER BY totalTime DESC
+        ORDER BY totalTime ${top ? "DESC" : "ASC"}
         LIMIT 3;
         `;
-    
+        
         return new Promise((resolve, reject) => {
             this.db.all(query, params, (err, rows) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-    
+        
                 resolve(rows);
             });
         });
     }
+    
 }
 export interface CommandCount {
     command: string;

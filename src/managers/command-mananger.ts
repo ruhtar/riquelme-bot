@@ -21,7 +21,7 @@ export class CommandManager {
             replyMessage(message, command, counter);
             return;
         }
-        
+
         if (command.toLowerCase() === 'riquelme') {
             const voiceChannel = message.member?.voice.channel;
             if (!voiceChannel) {

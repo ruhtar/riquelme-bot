@@ -22,15 +22,20 @@ export const generateReport = async () => {
 
         const relatorioComandosTotal: CommandCount[] = await repo.getTopCommandsByMonthAndYear();
 
-        const relatorioUsuarios: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getCurrentMonthAndYear());
+        const relatorioUsuariosMaisAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getCurrentMonthAndYear());
 
-        const relatorioUsuariosTotal: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear();
+        const relatorioUsuariosTotalMaisAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear();
+
+        const relatorioUsuariosMenosAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getCurrentMonthAndYear(), false);
+
+        const relatorioUsuariosTotalMenosAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(null, false);
 
         const mensagem = `# 📊📆🎉 **BEM VINDOS AO RELATÓRIO MENSAL DE ${getCurrentMonthName().toUpperCase()}!🎮🏳️‍🌈**
 
+        
 **Usuários mais ativos no mês:**
 
-${relatorioUsuarios.map((item, index) => {
+${relatorioUsuariosMaisAtivos.map((item, index) => {
     const member = guild.members.cache.get(item.user_id);
     let nome = member?.displayName
     if(!nome) nome = "Nerd desconhecido"
@@ -40,6 +45,21 @@ ${relatorioUsuarios.map((item, index) => {
     let medalha = "🥉";
     if (index === 0) medalha = "🥇";
     else if (index === 1) medalha = "🥈";
+    return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
+}).join('\n')}
+
+**Usuários menos ativos no mês:**
+
+${relatorioUsuariosMenosAtivos.map((item, index) => {
+    const member = guild.members.cache.get(item.user_id);
+    let nome = member?.displayName
+    if(!nome) nome = "Nerd desconhecido"
+    const hours = Math.floor(item.totalTime / 3600);
+    const minutes = Math.floor((item.totalTime % 3600) / 60);
+    const seconds = item.totalTime % 60;
+    let medalha = "🤮";
+    if (index === 0) medalha = "💩";
+    else if (index === 1) medalha = "🤡";
     return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
 }).join('\n')}
 
@@ -54,7 +74,7 @@ ${relatorioComandosMesAtual.map((item, index) => {
 
 **Usuários mais ativos no total:**
 
-${relatorioUsuariosTotal.map((item, index) => {
+${relatorioUsuariosTotalMaisAtivos.map((item, index) => {
     const member = guild.members.cache.get(item.user_id);
     let nome = member?.displayName
     if(!nome) nome = "Nerd desconhecido"
@@ -64,6 +84,21 @@ ${relatorioUsuariosTotal.map((item, index) => {
     let medalha = "🥉";
     if (index === 0) medalha = "🥇";
     else if (index === 1) medalha = "🥈";
+    return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
+}).join('\n')}
+
+**Usuários menos ativos no total:**
+
+${relatorioUsuariosTotalMenosAtivos.map((item, index) => {
+    const member = guild.members.cache.get(item.user_id);
+    let nome = member?.displayName
+    if(!nome) nome = "Nerd desconhecido"
+    const hours = Math.floor(item.totalTime / 3600);
+    const minutes = Math.floor((item.totalTime % 3600) / 60);
+    const seconds = item.totalTime % 60;
+    let medalha = "🤮";
+    if (index === 0) medalha = "💩";
+    else if (index === 1) medalha = "🤡";
     return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
 }).join('\n')}
 
