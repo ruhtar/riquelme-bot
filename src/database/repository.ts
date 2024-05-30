@@ -11,6 +11,7 @@ export class Repository {
             }
         });
     }
+
     public insertCommand(command: string, userId: string, date: string = getCurrentMonthAndYear()) {
         this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }
@@ -66,64 +67,71 @@ export class Repository {
         `, [userId, totalVoiceTime, date]);
     }
 
-    public getTopCommandsByMonthAndYear(date: string): Promise<CommandCount[] | any> {
-        const query = `
-                SELECT command, COUNT(command) as count
-                FROM commands
+    public getTopCommandsByMonthAndYear(date: string | null = null): Promise<CommandCount[] | any> {
+        let query = `
+            SELECT command, COUNT(command) as count
+            FROM commands
+        `;
+    
+        const params: any[] = [];
+    
+        if (date) {
+            query += `
                 WHERE date = ?
-                GROUP BY command
-                ORDER BY count DESC
-                LIMIT 3
             `;
-
-        const params = [date];
-
+            params.push(date);
+        }
+    
+        query += `
+            GROUP BY command
+            ORDER BY count DESC
+            LIMIT 3
+        `;
+    
         return new Promise((resolve, reject) => {
-            this.db.all(query, params, (err, row) => {
+            this.db.all(query, params, (err, rows) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-
-                if (row) {
-                    resolve(row)
-                } else {
-                    resolve(null);
-                }
+    
+                resolve(rows);
             });
         });
-        ;
     }
 
-    public getTopActiveUsersByMonthAndYear(date: string): Promise<any> {
-        const query = `
+    public getTopActiveUsersByMonthAndYear(date: string | null = null): Promise<any> {
+        let query = `
         SELECT user_id, SUM(total_time) AS totalTime
         FROM time_in_voice
-        WHERE date = ?
+        `;
+    
+        const params: any[] = [];
+    
+        if (date) {
+            query += `
+            WHERE date = ?
+            `;
+            params.push(date);
+        }
+    
+        query += `
         GROUP BY user_id
         ORDER BY totalTime DESC
         LIMIT 3;
         `;
-
-        const params = [date];
-
+    
         return new Promise((resolve, reject) => {
-            this.db.all(query, params, (err, row) => {
+            this.db.all(query, params, (err, rows) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-
-                if (row) {
-                    resolve(row)
-                } else {
-                    resolve(null);
-                }
+    
+                resolve(rows);
             });
         });
-        ;
     }
-
 }
 export interface CommandCount {
     command: string;

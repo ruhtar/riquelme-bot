@@ -1,26 +1,14 @@
 export { client };
-import * as dotenv from "dotenv";
-import express from 'express';
-import schedule from 'node-schedule';
-import { DatabaseInitializer } from "./database/database-initializer";
-import { checkBirthday } from "./managers/birthday-manager";
-import { CommandManager } from "./managers/command-mananger";
-import { generateReport } from "./managers/report-manager";
-import { VoiceTimeManager } from "./managers/voice-time-manager";
-import { ExtendedClient } from "./structs/ExtendedClient";
+  import * as dotenv from "dotenv";
+  import schedule from 'node-schedule';
+  import { DatabaseInitializer } from "./database/database-initializer";
+  import { checkBirthday } from "./managers/birthday-manager";
+  import { CommandManager } from "./managers/command-mananger";
+  import { generateReport } from "./managers/report-manager";
+  import { VoiceTimeManager } from "./managers/voice-time-manager";
+  import { ExtendedClient } from "./structs/ExtendedClient";
 
 dotenv.config();
-const app = express(); //this is used just to Render work
-
-const PORT = 3000 || process.env.PORT;
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-
-app.get('/', (req, res) => {
-  res.status(200).send();
-});
 
 const client = new ExtendedClient();
 new DatabaseInitializer();
@@ -37,8 +25,6 @@ schedule.scheduleJob('0 0 1 * *', function () {
   console.log("Executando no primeiro dia do mês.");
   generateReport();
 });
-
-//trocar a varivel de ambiente!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 client.on('voiceStateUpdate', (oldState, newState) => {
   voiceTimeManager.CountUsersTimeOnVoice(oldState, newState);

@@ -9,7 +9,6 @@ import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { getRandomUrl } from '../conts/videos/videos-list';
 import { Repository } from "../database/repository";
-import { generateReport } from './report-manager';
 import { VoiceTimeManager } from "./voice-time-manager";
 
 export class CommandManager {
@@ -22,12 +21,7 @@ export class CommandManager {
             replyMessage(message, command, counter);
             return;
         }
-
-        if (command.toLowerCase() === 'teste') {
-
-            generateReport();
-        }
-
+        
         if (command.toLowerCase() === 'riquelme') {
             const voiceChannel = message.member?.voice.channel;
             if (!voiceChannel) {
@@ -38,7 +32,7 @@ export class CommandManager {
                 const player = createAudioPlayer();
 
                 connection.subscribe(player);
-                await message.reply("QUEEEBRAAAA")
+                await message.reply("QUEEEEEEEEEEBRAAAAAAA")
 
                 player.on(AudioPlayerStatus.Idle, () => {
                     console.log('Song has finished playing!');
@@ -54,7 +48,7 @@ export class CommandManager {
 
         if (command.toLowerCase() === "comandos") {
             const listaComandos = counterCommandsList.join("\n");
-            message.reply("Tá aqui sua lista de comandos, aviãozeiro:\n" + listaComandos);
+            message.reply("Tá aqui sua lista de comandos, aviãozeiro:\n" + "\n" + listaComandos);
         }
 
         if (command.toLowerCase() === "voice") {
