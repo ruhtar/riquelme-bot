@@ -7,6 +7,7 @@ import { Message, VoiceBasedChannel } from "discord.js";
 import ytdl from 'ytdl-core';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
+import { getRandomUrl } from '../conts/videos/videos-list';
 import { Repository } from "../database/repository";
 import { VoiceTimeManager } from "./voice-time-manager";
 
@@ -26,23 +27,22 @@ export class CommandManager{
             if (!voiceChannel) {
                 return message.reply('Cê tem que estar em um canal de voz pra isso seu cabaço');
             }
-
-            const connection = await this.connectToChannel(voiceChannel)
-
-            const player = createAudioPlayer();
-
-            connection.subscribe(player);
-            await message.reply("QUEEEBRAAAA")
             try {
+                const connection = await this.connectToChannel(voiceChannel)
+                const player = createAudioPlayer();
+
+                connection.subscribe(player);
+                await message.reply("QUEEEBRAAAA")
+
+                player.on(AudioPlayerStatus.Idle, () => {
+                    console.log('Song has finished playing!');
+                    connection.destroy();
+                });
+
                 console.log('Song is ready to play!');
-                this.playSong(player, "https://www.youtube.com/watch?v=4ndwm1S59sg");
+                this.playSong(player, getRandomUrl());
             } catch (error) {
-                /**
-                 * The song isn't ready to play for some reason :(
-                 */
                 console.error(error);
-            }finally{
-                // if(connection) connection.destroy();
             }
         }
 
