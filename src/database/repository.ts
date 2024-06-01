@@ -47,18 +47,27 @@ export class Repository {
         });
     }
 
-    public getUsersTimeInVoiceByDate(userId: string, date: string = getCurrentMonthAndYear()): Promise<number | null> {
+    public getUsersTimeInVoiceByDate(userId: string, date?: string): Promise<number | null> {
         return new Promise((resolve, reject) => {
-            this.db.get(`SELECT SUM(total_time) AS total_time FROM time_in_voice WHERE user_id = ? AND date = ?`, [userId, date], (err, row: { total_time: number }) => {
+            let query = `SELECT SUM(total_time) AS total_time FROM time_in_voice WHERE user_id = ?`;
+            let params: (string | null)[] = [userId];
+    
+            if (date) {
+                query += ` AND date = ?`;
+                params.push(date);
+            }
+    
+            this.db.get(query, params, (err, row: { total_time: number }) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-
+    
                 resolve(row ? row.total_time : null);
             });
         });
     }
+    
 
     public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number, date: string = getCurrentMonthAndYear()) {
         this.db.run(`
