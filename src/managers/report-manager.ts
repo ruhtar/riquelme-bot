@@ -1,7 +1,7 @@
 import { TextChannel } from "discord.js";
 import { client } from "..";
 import { CommandCount, Repository, UserActiveReport } from "../database/repository";
-import { getCurrentMonthAndYear, getCurrentMonthName } from "../utils/actual-month";
+import { getCurrentMonthName, getPreviousMonthAndYear } from "../utils/actual-month";
 const { GuildMember } = require('discord.js');
 
 export const generateReport = async () => {
@@ -18,15 +18,15 @@ export const generateReport = async () => {
 
         let repo = new Repository()
 
-        const relatorioComandosMesAtual: CommandCount[] = await repo.getTopCommandsByMonthAndYear(getCurrentMonthAndYear());
+        const relatorioComandosMesAtual: CommandCount[] = await repo.getTopCommandsByMonthAndYear(getPreviousMonthAndYear());
 
         const relatorioComandosTotal: CommandCount[] = await repo.getTopCommandsByMonthAndYear();
 
-        const relatorioUsuariosMaisAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getCurrentMonthAndYear());
+        const relatorioUsuariosMaisAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getPreviousMonthAndYear());
 
         const relatorioUsuariosTotalMaisAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear();
 
-        const relatorioUsuariosMenosAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getCurrentMonthAndYear(), false);
+        const relatorioUsuariosMenosAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(getPreviousMonthAndYear(), false);
 
         const relatorioUsuariosTotalMenosAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(null, false);
 

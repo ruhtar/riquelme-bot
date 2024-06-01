@@ -35,9 +35,18 @@ client.on("messageCreate", async (message) => {
 
   const content = message.content;
 
-  if (content.startsWith("!")) {
-    const command = content.slice(1).toLowerCase();
-    await commandManager.handleCommand(message, command);
+  if (content.startsWith("!")) {    
+    const regex = /(\!\w+)\s(\d{2}-\d{2})/; 
+    const match = content.match(regex);
+
+    if(match){
+      const command = match[1].slice(1).toLowerCase(); 
+      const date = match[2]; 
+      await commandManager.handleCommand(message, command, date);
+    }else{
+      const command = content.slice(1).toLowerCase();
+      await commandManager.handleCommand(message, command);
+    }
   }
 
   if (content.startsWith("?")) {

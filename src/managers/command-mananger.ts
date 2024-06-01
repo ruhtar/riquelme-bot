@@ -22,7 +22,7 @@ export class CommandManager {
         }
     }
 
-    public async handleCommand(message: Message, command: string) {
+    public async handleCommand(message: Message, command: string, data: string= "") {
         if (counterCommandsList.includes(command.toLowerCase())) {
             const repository = new Repository();
             repository.insertCommand(command, message.author.id);
@@ -61,7 +61,12 @@ export class CommandManager {
 
         if (command.toLowerCase() === "voice") {
             const voiceTimeManager = new VoiceTimeManager();
-            await voiceTimeManager.getSelfTotalTimeInVoice(message);
+            if(data){
+                await voiceTimeManager.getSelfTotalTimeInVoice(message, data);
+
+            }else{
+                await voiceTimeManager.getSelfTotalTimeInVoice(message);
+            }
         }
 
         if (/voice <@\d+>/.test(command)) {

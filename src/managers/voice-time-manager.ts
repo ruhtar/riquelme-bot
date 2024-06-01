@@ -15,10 +15,16 @@ export class VoiceTimeManager {
     this.replyTotalTimeMessage(totalTime, message, userDisplayName);
   }
 
-  public async getSelfTotalTimeInVoice(message: Message) {
+  public async getSelfTotalTimeInVoice(message: Message, data: string = "") {
     const userId = message.author.id;
     const repository = new Repository();
-    const totalTime = await repository.getUsersTimeInVoiceByDate(userId);
+    let totalTime : number | null;
+
+    if(data){
+      totalTime = await repository.getUsersTimeInVoiceByDate(userId, data)
+    }else{
+      totalTime = await repository.getUsersTimeInVoiceByDate(userId)
+    }
 
     this.replyTotalTimeMessage(totalTime, message, message.author.displayName);
   }
