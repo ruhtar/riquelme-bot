@@ -90,7 +90,7 @@ export class Repository {
         query += `
             GROUP BY command
             ORDER BY count DESC
-            LIMIT 3
+            LIMIT 5
         `;
     
         return new Promise((resolve, reject) => {
@@ -127,7 +127,7 @@ export class Repository {
         query += `
         GROUP BY user_id
         ORDER BY totalTime ${top ? "DESC" : "ASC"}
-        LIMIT 3;
+        LIMIT 5;
         `;
         
         return new Promise((resolve, reject) => {

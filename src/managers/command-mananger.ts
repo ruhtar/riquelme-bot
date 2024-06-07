@@ -9,6 +9,7 @@ import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { getRandomUrl } from '../conts/videos/videos-list';
 import { Repository } from "../database/repository";
+import { generateReport } from './report-manager';
 import { VoiceTimeManager } from "./voice-time-manager";
 
 export class CommandManager {
@@ -65,6 +66,10 @@ export class CommandManager {
             }else{
                 await voiceTimeManager.getSelfTotalTimeInVoice(message);
             }
+        }
+
+        if (command.toLowerCase() === "report"){
+            generateReport();
         }
 
         if (/voice <@\d+>/.test(command)) {
@@ -128,7 +133,6 @@ export class CommandManager {
             throw error;
         }
     }
-
 }
 
 

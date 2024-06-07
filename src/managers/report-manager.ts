@@ -1,4 +1,4 @@
-import { TextChannel } from "discord.js";
+import { Guild, TextChannel } from "discord.js";
 import { client } from "..";
 import { Repository } from "../database/repository";
 import { CommandCount, UserActiveReport } from "../structs/types/DataTypes";
@@ -31,87 +31,26 @@ export const generateReport = async () => {
 
         const relatorioUsuariosTotalMenosAtivos: UserActiveReport[] = await repo.getTopActiveUsersByMonthAndYear(null, false);
 
-        const mensagem = `# 📊📆🎉 **BEM VINDOS AO RELATÓRIO MENSAL DE ${getCurrentMonthName().toUpperCase()}!🎮🏳️‍🌈**
+        const mensagem = `# 📊📆🎉 ** EAÍ, SEUS NERDS. BEM VINDOS AO RELATÓRIO MENSAL DE ${getCurrentMonthName().toUpperCase()}!🎮🏳️‍🌈**
 
-        
+
 **Usuários mais ativos no mês:**
-
-${relatorioUsuariosMaisAtivos.map((item, index) => {
-    const member = guild.members.cache.get(item.user_id);
-    let nome = member?.displayName
-    if(!nome) nome = "Nerd desconhecido"
-    const hours = Math.floor(item.totalTime / 3600);
-    const minutes = Math.floor((item.totalTime % 3600) / 60);
-    const seconds = item.totalTime % 60;
-    let medalha = "🥉";
-    if (index === 0) medalha = "🥇";
-    else if (index === 1) medalha = "🥈";
-    return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
-}).join('\n')}
+${formatUserActivity(relatorioUsuariosMaisAtivos, guild, ["🥇", "🥈", "🥉","🏅","🎖️"])}
 
 **Usuários menos ativos no mês:**
-
-${relatorioUsuariosMenosAtivos.map((item, index) => {
-    const member = guild.members.cache.get(item.user_id);
-    let nome = member?.displayName
-    if(!nome) nome = "Nerd desconhecido"
-    const hours = Math.floor(item.totalTime / 3600);
-    const minutes = Math.floor((item.totalTime % 3600) / 60);
-    const seconds = item.totalTime % 60;
-    let medalha = "🤮";
-    if (index === 0) medalha = "💩";
-    else if (index === 1) medalha = "🤡";
-    return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
-}).join('\n')}
+${formatUserActivity(relatorioUsuariosMenosAtivos, guild, ["💩", "🤡", "🤮", "🚽", "🗑️"])}
 
 **Comandos mais utilizados no mês**
-
-${relatorioComandosMesAtual.map((item, index) => {
-    let medalha = "🥉";
-    if (index === 0) medalha = "🥇";
-    else if (index === 1) medalha = "🥈";
-    return `${medalha} ${index + 1}. ${item.command} - Vezes usado: ${item.count}`;
-}).join('\n')}
+${formatCommandUsage(relatorioComandosMesAtual, ["🥇", "🥈", "🥉","🏅","🎖️"])}
 
 **Usuários mais ativos no total:**
-
-${relatorioUsuariosTotalMaisAtivos.map((item, index) => {
-    const member = guild.members.cache.get(item.user_id);
-    let nome = member?.displayName
-    if(!nome) nome = "Nerd desconhecido"
-    const hours = Math.floor(item.totalTime / 3600);
-    const minutes = Math.floor((item.totalTime % 3600) / 60);
-    const seconds = item.totalTime % 60;
-    let medalha = "🥉";
-    if (index === 0) medalha = "🥇";
-    else if (index === 1) medalha = "🥈";
-    return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
-}).join('\n')}
+${formatUserActivity(relatorioUsuariosTotalMaisAtivos, guild, ["🥇", "🥈", "🥉","🏅","🎖️"])}
 
 **Usuários menos ativos no total:**
-
-${relatorioUsuariosTotalMenosAtivos.map((item, index) => {
-    const member = guild.members.cache.get(item.user_id);
-    let nome = member?.displayName
-    if(!nome) nome = "Nerd desconhecido"
-    const hours = Math.floor(item.totalTime / 3600);
-    const minutes = Math.floor((item.totalTime % 3600) / 60);
-    const seconds = item.totalTime % 60;
-    let medalha = "🤮";
-    if (index === 0) medalha = "💩";
-    else if (index === 1) medalha = "🤡";
-    return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${hours}h ${minutes}min ${seconds}segs`;
-}).join('\n')}
+${formatUserActivity(relatorioUsuariosTotalMenosAtivos, guild, ["💩", "🤡", "🤮", "🚽", "🗑️"])}
 
 **Comandos mais utilizados até hoje:**
-
-${relatorioComandosTotal.map((item, index) => {
-    let medalha = "🥉";
-    if (index === 0) medalha = "🥇";
-    else if (index === 1) medalha = "🥈";
-    return `${medalha} ${index + 1}. ${item.command} - Vezes usado: ${item.count}`;
-}).join('\n')}
-`;
+${formatCommandUsage(relatorioComandosTotal, ["🥇", "🥈", "🥉","🏅","🎖️"])}`;
 
         (channel as TextChannel).send({
             content: mensagem,
@@ -122,4 +61,32 @@ ${relatorioComandosTotal.map((item, index) => {
     } catch (error) {
         console.log('error', error)
     }
+};
+
+const getUserDisplayName = (userId: string, guild: Guild): string => {
+    const member = guild.members.cache.get(userId);
+    return member?.displayName || "Nerd desconhecido";
+};
+
+const formatTime = (totalTime: number): string => {
+    const hours = Math.floor(totalTime / 3600);
+    const minutes = Math.floor((totalTime % 3600) / 60);
+    const seconds = totalTime % 60;
+    return `${hours}h ${minutes}min ${seconds}segs`;
+};
+
+const formatUserActivity = (relatorio: UserActiveReport[], guild: Guild, medals: string[]): string => {
+    return relatorio.map((item, index) => {
+        const nome = getUserDisplayName(item.user_id, guild);
+        const timeFormatted = formatTime(item.totalTime);
+        const medalha = medals[index] || medals[medals.length - 1];
+        return `${medalha} ${index + 1}. ${nome} - Tempo Ativo: ${timeFormatted}`;
+    }).join('\n');
+};
+
+const formatCommandUsage = (relatorio: CommandCount[], medals: string[]): string => {
+    return relatorio.map((item, index) => {
+        const medalha = medals[index] || medals[medals.length - 1];
+        return `${medalha} ${index + 1}. ${item.command} - Vezes usado: ${item.count}`;
+    }).join('\n');
 };
