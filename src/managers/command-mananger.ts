@@ -54,9 +54,14 @@ export class CommandManager {
         }
 
         if (command.toLowerCase() === "comandos") {
-            const listaComandos = counterCommandsList.join("\n");
-            message.reply("Tá aqui sua lista de comandos, aviãozeiro:\n" + "\n" + listaComandos);
+            const listaComandos = counterCommandsList.map(command => `\`${command}\``).join("\n");
+            message.reply("**Tá aqui sua lista de comandos, aviãozeiro:**\n" + "\n" + listaComandos);
         }
+
+        // if (command.toLowerCase() === "comandos") {
+        //     const listaComandosFormatada = counterCommandsList.map(command => `\`${command}\``).join(", ");
+        //     message.reply("Aqui estão os comandos disponíveis para você, aviãozeiro:\n\n" + listaComandosFormatada);
+        // }
 
         if (command.toLowerCase() === "voice") {
             const voiceTimeManager = new VoiceTimeManager();
