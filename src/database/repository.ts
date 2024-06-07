@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+import { CommandCount, UserActiveReport } from "../structs/types/DataTypes";
 import { getCurrentMonthAndYear } from "../utils/actual-month";
 
 export class Repository {
@@ -16,33 +17,28 @@ export class Repository {
         this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }
 
-    public getCommandCounter(command: string, userId: string = "", date: string = ""): any { //yes, i know, judge me
+    public getCommandCounter(command: string, userId: string = "", date: string = ""): Promise<number> {
         let query = 'SELECT COUNT(*) AS count FROM commands WHERE command = ?';
-
+    
         let params = [command];
-
+    
         if (userId !== "") {
             query += ' AND user_id = ?';
             params.push(userId);
         }
-
+    
         if (date !== "") {
             query += ' AND date = ?';
             params.push(date);
         }
-
+    
         return new Promise((resolve, reject) => {
-            this.db.get(query, params, (err, row) => {
+            this.db.get(query, params, (err, row: {count: number}) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-
-                if (row) {
-                    resolve(row)
-                } else {
-                    resolve(null);
-                }
+                resolve(row ? row.count: 0); 
             });
         });
     }
@@ -76,13 +72,13 @@ export class Repository {
         `, [userId, totalVoiceTime, date]);
     }
 
-    public getTopCommandsByMonthAndYear(date: string | null = null): Promise<CommandCount[] | any> {
+    public getTopCommandsByMonthAndYear(date: string | null = null): Promise<CommandCount[]> {
         let query = `
             SELECT command, COUNT(command) as count
             FROM commands
         `;
     
-        const params: any[] = [];
+        const params:( string | null)[] = [];
     
         if (date) {
             query += `
@@ -98,7 +94,7 @@ export class Repository {
         `;
     
         return new Promise((resolve, reject) => {
-            this.db.all(query, params, (err, rows) => {
+            this.db.all(query, params, (err, rows : [{command: string, count: number}]) => {
                 if (err) {
                     reject(err.message);
                     return;
@@ -109,13 +105,13 @@ export class Repository {
         });
     }
     
-    public getTopActiveUsersByMonthAndYear(date: string | null = null, top: boolean = true): Promise<any> {
+    public getTopActiveUsersByMonthAndYear(date: string | null = null, top: boolean = true): Promise<UserActiveReport[]> {
         let query = `
         SELECT user_id, SUM(total_time) AS totalTime
         FROM time_in_voice
         `;
         
-        const params: any[] = [];
+        const params: (string | null)[] = [];
         
         if (date) {
             query += `
@@ -135,7 +131,7 @@ export class Repository {
         `;
         
         return new Promise((resolve, reject) => {
-            this.db.all(query, params, (err, rows) => {
+            this.db.all(query, params, (err, rows: [{user_id: string, totalTime: number}]) => {
                 if (err) {
                     reject(err.message);
                     return;
@@ -145,13 +141,4 @@ export class Repository {
             });
         });
     }
-}
-export interface CommandCount {
-    command: string;
-    count: number;
-}
-
-export interface UserActiveReport {
-    user_id: string,
-    totalTime: number
 }

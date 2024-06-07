@@ -15,8 +15,7 @@ export class CommandManager {
     public async consultarComando(message: Message, command: string, data: string= ""){
         if (counterCommandsList.includes(command.toLowerCase())) {
             const repository = new Repository();
-            var counterObject = await repository.getCommandCounter(command, "", data);
-            var counter = Object.values(counterObject)[0];
+            var counter = await repository.getCommandCounter(command, "", data);
             replyMessage(message, command, counter);
             return;
         }
@@ -26,8 +25,7 @@ export class CommandManager {
         if (counterCommandsList.includes(command.toLowerCase())) {
             const repository = new Repository();
             repository.insertCommand(command, message.author.id);
-            var counterObject = await repository.getCommandCounter(command);
-            var counter = Object.values(counterObject)[0];
+            var counter = await repository.getCommandCounter(command, "", data);
             replyMessage(message, command, counter);
             return;
         }

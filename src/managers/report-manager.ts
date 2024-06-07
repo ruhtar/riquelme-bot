@@ -1,6 +1,7 @@
 import { TextChannel } from "discord.js";
 import { client } from "..";
-import { CommandCount, Repository, UserActiveReport } from "../database/repository";
+import { Repository } from "../database/repository";
+import { CommandCount, UserActiveReport } from "../structs/types/DataTypes";
 import { getCurrentMonthName, getPreviousMonthAndYear } from "../utils/actual-month";
 const { GuildMember } = require('discord.js');
 
