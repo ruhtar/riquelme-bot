@@ -1,4 +1,4 @@
-export const videoUrlsList: string[] =
+const videoUrlsList: string[] =
         ["https://www.youtube.com/watch?v=0BSwlB3uaDM",
         "https://www.youtube.com/watch?v=KzgwFhIuRtI",
         "https://www.youtube.com/watch?v=sUEJ-avKFMo",

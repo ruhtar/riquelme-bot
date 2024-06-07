@@ -1,7 +1,7 @@
 export const counterCommandsList: string[] =
     ["darkleo",
         "laele",
-        "lanchinho",
+        "saidinha",
         "safadeza",
         "fakenews",
         "flash",

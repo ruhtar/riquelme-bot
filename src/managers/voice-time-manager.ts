@@ -52,13 +52,6 @@ export class VoiceTimeManager {
       console.log(`${member.displayName} entrou em um canal`);
 
       this.startTimePerUser.set(userId, Math.floor(Date.now() / 1000));
-      // const totalTime = await repository.getTimeInVoiceByUserId(userId)
-      // if (!totalTime) { 
-      //   // Se o usuário não estava em um canal antes, inicializa o tempo
-      //   // TODO: Alterar para que ele puxe do SQLite o tempo ao inves de ficar guardando em memória. 
-      //   // this.voiceTime.set(userId, 0);
-      //   repository.saveTotalVoiceTimeToDatabase(userId, 0, getCurrentMonthAndYear())
-      // }
     }
 
     if (oldState.channel && userId && !newState.channel) {
@@ -66,10 +59,8 @@ export class VoiceTimeManager {
       console.log(`${member.displayName} saiu do canal`);
 
       const endTime = Math.floor(Date.now() / 1000); // Converte para segundos
-      //   let startTime = await databaseManager.getVoiceTimeByUserId(userId);
       let startTime = this.startTimePerUser.get(userId);
       if (!startTime) {
-        // databaseManager.saveToDatabase(userId, 0)
         startTime = Math.floor(Date.now() / 1000);
       }
 

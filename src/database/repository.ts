@@ -63,7 +63,6 @@ export class Repository {
             });
         });
     }
-    
 
     public saveTotalVoiceTimeToDatabase(userId: string, totalVoiceTime: number, date: string = getCurrentMonthAndYear()) {
         this.db.run(`
