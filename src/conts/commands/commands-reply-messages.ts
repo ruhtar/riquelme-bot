@@ -13,6 +13,7 @@ export const replyMessage = (message: Message, command: string, counter: unknown
         ["fakenews", `É A ${counter}º FAKE NEWS QUE PABLO LYRA SOLTA`],
         ["darkleo", `\`Leossamp entrou no modo dark ${counter} vezes.\``],
         ["laele", `**laele ${counter} vezes**`],
+        ["flash", `**Augusto já reclamou que todo mundo tem flash ${counter} vezes**`],
     ]);
 
     const response = responseMap.get(command);

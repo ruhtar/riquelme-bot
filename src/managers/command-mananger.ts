@@ -4,6 +4,8 @@ import {
     entersState, joinVoiceChannel
 } from '@discordjs/voice';
 import { Message, VoiceBasedChannel } from "discord.js";
+import ffmpegPath from 'ffmpeg-static';
+import ffmpeg from 'fluent-ffmpeg';
 import ytdl from 'ytdl-core';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
@@ -89,37 +91,29 @@ export class CommandManager {
     }
 
     private async playSong(player: AudioPlayer, url: string) {
-        /**
-         * Here we are creating an audio resource using a sample song freely available online
-         * (see https://www.soundhelix.com/audio-examples)
-         *
-         * We specify an arbitrary inputType. This means that we aren't too sure what the format of
-         * the input is, and that we'd like to have this converted into a format we can use. If we
-         * were using an Ogg or WebM source, then we could change this value. However, for now we
-         * will leave this as arbitrary.
-         */
+        // Stream do youtube com ytdl-core
         const stream = ytdl(url, {
             filter: 'audioonly',
             quality: 'highestaudio',
             highWaterMark: 1 << 25 // Aumenta o buffer de água para evitar interrupções
         });
+    
+        // Use FFmpeg to normalize the audio volume
+        if (ffmpegPath === null)
+            return;
 
-
-        const resource = createAudioResource(stream, {
+        const normalizedStream : any = ffmpeg(stream)
+            .setFfmpegPath(ffmpegPath)
+            .audioFilter('loudnorm') // Normaliza o volume usando o filtro loudnorm
+            .format('mp3')
+            .pipe();
+    
+        const resource = createAudioResource(normalizedStream, {
             inputType: StreamType.Arbitrary,
         });
-
-        /**
-         * We will now play this to the audio player. By default, the audio player will not play until
-         * at least one voice connection is subscribed to it, so it is fine to attach our resource to the
-         * audio player this early.
-         */
+    
         player.play(resource);
-
-        /**
-         * Here we are using a helper function. It will resolve if the player enters the Playing
-         * state within 5 seconds, otherwise it will reject with an error.
-         */
+    
         return entersState(player, AudioPlayerStatus.Playing, 5000);
     }
 
@@ -139,5 +133,3 @@ export class CommandManager {
         }
     }
 }
-
-
