@@ -6,6 +6,7 @@ import {
 import { Message, VoiceBasedChannel } from "discord.js";
 import ffmpegPath from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
+import { PassThrough, Readable } from 'stream';
 import ytdl from 'ytdl-core';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
@@ -60,16 +61,10 @@ export class CommandManager {
             message.reply("**Tá aqui sua lista de comandos, aviãozeiro:**\n" + "\n" + listaComandos);
         }
 
-        // if (command.toLowerCase() === "comandos") {
-        //     const listaComandosFormatada = counterCommandsList.map(command => `\`${command}\``).join(", ");
-        //     message.reply("Aqui estão os comandos disponíveis para você, aviãozeiro:\n\n" + listaComandosFormatada);
-        // }
-
         if (command.toLowerCase() === "voice") {
             const voiceTimeManager = new VoiceTimeManager();
             if(data){
                 await voiceTimeManager.getSelfTotalTimeInVoice(message, data);
-
             }else{
                 await voiceTimeManager.getSelfTotalTimeInVoice(message);
             }
@@ -102,11 +97,15 @@ export class CommandManager {
         if (ffmpegPath === null)
             return;
 
-        const normalizedStream : any = ffmpeg(stream)
-            .setFfmpegPath(ffmpegPath)
-            .audioFilter('loudnorm') // Normaliza o volume usando o filtro loudnorm
-            .format('mp3')
-            .pipe();
+        const passThroughStream = new PassThrough();
+
+        ffmpeg(stream)
+        .setFfmpegPath(ffmpegPath)
+        .audioFilter('loudnorm') // Normalize volume using loudnorm filter
+        .format('mp3')
+        .pipe(passThroughStream);
+
+        const normalizedStream: Readable = passThroughStream;
     
         const resource = createAudioResource(normalizedStream, {
             inputType: StreamType.Arbitrary,
