@@ -21,6 +21,7 @@ schedule.scheduleJob('0 0 * * *', function () {
   checkBirthday();
 });
 
+
 schedule.scheduleJob('0 0 1 * *', function () {
   console.log("Executando no primeiro dia do mês.");
   generateReport();
@@ -68,3 +69,5 @@ client.on("messageCreate", async (message) => {
 client.on("ready", async () => {
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidô")
 });
+
+

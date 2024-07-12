@@ -1,8 +1,8 @@
 export const getCurrentMonthAndYear = () => {
-    const dataAtual = new Date();
-    const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
-    const ano = String(dataAtual.getFullYear()).slice(-2);
-    return `${mes}-${ano}`;
+    const today = new Date();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Os meses são de 0 a 11
+    const day = today.getDate().toString().padStart(2, '0');
+    return `${month}-${day}`;
 }
 
 export const getCurrentMonthName = () => {
@@ -11,7 +11,6 @@ export const getCurrentMonthName = () => {
     const nomeMes = months[dataAtual.getMonth()];
     return nomeMes;
 }
-
 
 export const getPreviousMonthAndYear = (): string => {
     const dataAtual = new Date();

@@ -6,14 +6,16 @@ import { getCurrentMonthAndYear } from "../utils/month-functions";
 
 export const checkBirthday = () => {
   for (const pessoa in birthdays) {
+    console.log('getCurrentMonthAndYear()',getCurrentMonthAndYear())
     if (birthdays[pessoa] ===  getCurrentMonthAndYear()) {
       const channelId = process.env.CHANNEL_ID;
-
+      
       if (!channelId) return;
-
-      const channel = client.channels.cache.get(channelId);
+      
+      const channel = client.channels.cache.get(channelId); //this is bad because if the bot has no cache info (no commands were sent), it will not know the channelId
 
       if (!channel) return;
+      
 
       (channel as TextChannel).send({
         content: `# 🎉🌟🥳🎈 **Hoje é aniversário de ${pessoa}!** 🎂🎊🎁 **Parabéns!** 🎉🥳🌟🎈`,
