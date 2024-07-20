@@ -6,7 +6,6 @@ import { getCurrentMonthAndYear } from "../utils/month-functions";
 
 export const checkBirthday = () => {
   for (const pessoa in birthdays) {
-    console.log('getCurrentMonthAndYear()',getCurrentMonthAndYear())
     if (birthdays[pessoa] ===  getCurrentMonthAndYear()) {
       const channelId = process.env.CHANNEL_ID;
       
