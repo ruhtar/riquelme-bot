@@ -3,11 +3,11 @@ import {
     VoiceConnectionStatus, createAudioPlayer, createAudioResource,
     entersState, joinVoiceChannel
 } from '@discordjs/voice';
+import ytdl from '@distube/ytdl-core';
 import { Message, VoiceBasedChannel } from "discord.js";
 import ffmpegPath from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
 import { PassThrough, Readable } from 'stream';
-import ytdl from 'ytdl-core';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { getRandomUrl } from '../conts/videos/videos-list';
