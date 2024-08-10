@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 import { CommandCount, UserActiveReport } from "../structs/types/DataTypes";
-import { getCurrentMonthAndYear } from "../utils/month-functions";
+import { getCurrentMonthAndYear } from "../utils/date-functions";
 
 export class Repository {
     public db: sqlite3.Database;

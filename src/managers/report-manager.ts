@@ -2,7 +2,7 @@ import { Guild, TextChannel } from "discord.js";
 import { client } from "..";
 import { Repository } from "../database/repository";
 import { CommandCount, UserActiveReport } from "../structs/types/DataTypes";
-import { getCurrentMonthName, getPreviousMonthAndYear } from "../utils/month-functions";
+import { getCurrentMonthName, getPreviousMonthAndYear } from "../utils/date-functions";
 const { GuildMember } = require('discord.js');
 
 export const generateReport = async () => {

@@ -2,11 +2,11 @@ import { TextChannel } from "discord.js";
 import { client } from "..";
 import { parabens } from "../conts/birthday/birthday-reply-messages";
 import { birthdays } from "../conts/birthday/birthdays-list";
-import { getCurrentMonthAndYear } from "../utils/month-functions";
+import { getCurrentMonthAndDay } from "../utils/date-functions";
 
 export const checkBirthday = () => {
   for (const pessoa in birthdays) {
-    if (birthdays[pessoa] ===  getCurrentMonthAndYear()) {
+    if (birthdays[pessoa] ===  getCurrentMonthAndDay()) {
       const channelId = process.env.CHANNEL_ID;
       
       if (!channelId) return;
