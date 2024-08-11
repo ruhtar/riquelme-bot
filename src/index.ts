@@ -16,13 +16,13 @@ const commandManager = new CommandManager();
 client.start();
 const voiceTimeManager = new VoiceTimeManager();
 
-schedule.scheduleJob('0 0 * * *', function () {
+schedule.scheduleJob('0 3 * * *', function () {
   console.log("Executando verificação de aniversário todos os dias à meia-noite.");
   checkBirthday();
 });
 
 
-schedule.scheduleJob('0 0 1 * *', function () {
+schedule.scheduleJob('0 3 1 * *', function () {
   console.log("Executando no primeiro dia do mês.");
   generateReport();
 });
