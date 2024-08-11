@@ -17,7 +17,5 @@ export const replyMessage = (message: Message, command: string, counter: unknown
     ]);
 
     const response = responseMap.get(command);
-    if (response) {
-        message.reply(response);
-    }
+    if (response) message.reply(response);
 };

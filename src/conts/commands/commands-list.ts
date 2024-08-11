@@ -1,5 +1,6 @@
 export const counterCommandsList: string[] =
-    ["darkleo",
+    [
+        "darkleo",
         "laele",
         "saidinha",
         "safadeza",
@@ -11,4 +12,5 @@ export const counterCommandsList: string[] =
         "fantasma",
         "quorum",
         "putaria",
-        "arroto"];
+        "arroto"
+    ];

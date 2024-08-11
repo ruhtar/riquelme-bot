@@ -46,28 +46,31 @@ export class VoiceTimeManager {
     const member = oldState.member || newState.member;
     const userId = member?.id;
     const repository = new Repository();
+    const userJoinedAChannel = newState.channel && userId && !oldState.channel;
 
-    if (newState.channel && userId && !oldState.channel) {
-      // Entrou em um canal
+    if (userJoinedAChannel) {
       console.log(`${member.displayName} entrou em um canal`);
-
       this.startTimePerUser.set(userId, Math.floor(Date.now() / 1000));
     }
 
-    if (oldState.channel && userId && !newState.channel) {
-      // Saiu de um canal
+    const userDisconectedFromChannel = oldState.channel && userId && !newState.channel;
+
+    if (userDisconectedFromChannel) {
       console.log(`${member.displayName} saiu do canal`);
 
-      const endTime = Math.floor(Date.now() / 1000); // Converte para segundos
+      const endTime = Math.floor(Date.now() / 1000); // Converting to seconds
+
       let startTime = this.startTimePerUser.get(userId);
-      if (!startTime) {
+
+      if (!startTime) 
         startTime = Math.floor(Date.now() / 1000);
-      }
 
       const timeInVoiceToAdd = endTime - startTime;
+
       if (!timeInVoiceToAdd) return;
 
       repository.saveTotalVoiceTimeToDatabase(userId, timeInVoiceToAdd);
+
       this.startTimePerUser.set(userId, 0); //reset
     }
   }
