@@ -50,9 +50,10 @@ export class CommandManager {
                     connection.destroy();
                 });
 
-                this.playSong(player, getRandomUrl());
+                this.playSong(player, getRandomUrl(), message);
             } catch (error) {
-                console.error(error);
+                console.log('AVIÃOZEIRO!!!!!! DEU PANE AQUI:',error)
+                await message.reply("AVIÃOZEIRO, DEU ALGUMA PANE AQUI. VOU FICAR TE DEVENDO")
             }
         }
 
@@ -85,7 +86,10 @@ export class CommandManager {
         }
     }
 
-    private async playSong(player: AudioPlayer, url: string) {
+    private async playSong(player: AudioPlayer, url: string, message: Message<boolean>) {
+        console.log('url sorteada: ',url)
+
+        try {
         // Stream do youtube com ytdl-core
         const stream = ytdl(url, {
             filter: 'audioonly',
@@ -114,6 +118,10 @@ export class CommandManager {
         player.play(resource);
     
         return entersState(player, AudioPlayerStatus.Playing, 5000);
+        } catch (error) {
+            console.log('AVIÃOZEIRO!!!!!! DEU PANE AQUI:',error)
+            await message.reply("AVIÃOZEIRO, DEU ALGUMA PANE AQUI. VOU FICAR TE DEVENDO")
+        }
     }
 
     private async connectToChannel(channel: VoiceBasedChannel): Promise<VoiceConnection> {
