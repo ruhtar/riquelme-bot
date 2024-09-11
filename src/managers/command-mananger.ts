@@ -72,7 +72,7 @@ export class CommandManager {
         if (counterCommandsList.includes(lowerCommand)) {
             await this.handleCounterCommand(message, lowerCommand, data);
         } else if (lowerCommand === 'riquelme') {
-            await this.handleRiquelmeCommand(message);
+            // await this.handleRiquelmeCommand(message); //TÁ BUGADO!!
         } else if (lowerCommand === 'comandos') {
             await respondWithCommandList(message);
         } else if (lowerCommand === 'voice') {

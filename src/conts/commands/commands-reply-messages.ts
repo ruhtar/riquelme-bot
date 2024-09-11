@@ -10,10 +10,14 @@ export const replyMessage = (message: Message, command: string, counter: unknown
         ["flau", `Esse é o \`${counter}º corte do Flau Podcast™\``],
         ["saidinha", `Você caiu na saidinha do Victão pela ${counter}º vez.`],
         ["safadeza", `Victor Mateus falou uma safadeza pela ${counter}º vez.`],
-        ["fakenews", `É A ${counter}º FAKE NEWS QUE PABLO LYRA SOLTA`],
+        ["fakenews", `É A ${counter}º FAKE NEWS QUE SOLTAM NESSA PORRA`],
         ["darkleo", `\`Leossamp entrou no modo dark ${counter} vezes.\``],
         ["laele", `**laele ${counter} vezes**`],
         ["flash", `**Augusto já reclamou que todo mundo tem flash ${counter} vezes**`],
+        ["vitoria", `**GANHAMO ${counter} JOGOS NESSA PORRA. SEM MEDOO. PRA CIMA**`],
+        ["derrota", `\`perdemo. tem dia que é noite. E foram ${counter} noites.\``],
+        ["ace", `CONTAGEM DE \`PAMBAMPAMBAMS\`: ${counter}.`],
+        ["smurf", `Essa é a Promessa Do Prata™ #${counter}`]
     ]);
 
     const response = responseMap.get(command);
