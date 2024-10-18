@@ -30,6 +30,10 @@ client.on("messageCreate", async (message) => {
 
   repo.saveUserMessage(message.author.id, message.content);
 
+  if(content === "!mensagens"){
+
+  }
+
   if (content.startsWith("!")) {
     const match = content.match(/(\!\w+)\s(\d{2}-\d{2})/);
 

@@ -21,6 +21,32 @@ export class Repository {
         this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }
 
+    // public getMessagesCounter(userId: string = "", date: string = ""): Promise<number> {
+    //     let query = 'SELECT COUNT(*) AS count FROM messages_counter WHERE';
+    
+    //     let params = [];
+    
+    //     if (userId !== "") {
+    //         query += ' user_id = ?';
+    //         params.push(userId);
+    //     }
+    
+    //     if (date !== "") {
+    //         query += ' AND date = ?';
+    //         params.push(date);
+    //     }
+    
+    //     return new Promise((resolve, reject) => {
+    //         this.db.get(query, params, (err, row: {count: number}) => {
+    //             if (err) {
+    //                 reject(err.message);
+    //                 return;
+    //             }
+    //             resolve(row ? row.count: 0); 
+    //         });
+    //     });
+    // }
+
     public getCommandCounter(command: string, userId: string = "", date: string = ""): Promise<number> {
         let query = 'SELECT COUNT(*) AS count FROM commands WHERE command = ?';
     
