@@ -12,16 +12,29 @@ export class DatabaseInitializer {
                 this.db.serialize(() => {
                     this.createTimeInVoiceTable();
                     this.createCommandsTables();
+                    this.createMessagesCounterTables();
                 });
             }
         });
     }
+
     private createCommandsTables() {
         this.db.run(`
         CREATE TABLE IF NOT EXISTS commands (
             id INTEGER PRIMARY KEY AUTOINCREMENT , 
             user_id TEXT,
             command TEXT DEFAULT NULL,
+            date TEXT
+        )
+        `);
+    }
+
+    private createMessagesCounterTables() {
+        this.db.run(`
+        CREATE TABLE IF NOT EXISTS messages_counter (
+            id INTEGER PRIMARY KEY AUTOINCREMENT , 
+            user_id TEXT,
+            message_text TEXT DEFAULT NULL,
             date TEXT
         )
         `);

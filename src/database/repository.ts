@@ -13,6 +13,10 @@ export class Repository {
         });
     }
 
+    public saveUserMessage(userId: string, message: string, date: string = getCurrentMonthAndYear()){
+        this.db.run(`INSERT INTO messages_counter (user_id, message_text, date) VALUES (?, ?, ?)`, [userId, message, date]);
+    }
+
     public insertCommand(command: string, userId: string, date: string = getCurrentMonthAndYear()) {
         this.db.run(`INSERT INTO commands (user_id, command, date) VALUES (? , ?, ?)`, [userId, command, date]);
     }

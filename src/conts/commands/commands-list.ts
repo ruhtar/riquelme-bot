@@ -16,5 +16,6 @@ export const counterCommandsList: string[] =
         "vitoria",
         "derrota",
         "ace",
-        "smurf"
+        "smurf",
+        "mensagens"
     ];

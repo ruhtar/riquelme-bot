@@ -1,6 +1,7 @@
 export { client };
   import * as dotenv from "dotenv";
   import { DatabaseInitializer } from "./database/database-initializer";
+  import { Repository } from "./database/repository";
   import { CommandManager } from "./managers/command-mananger";
   import { VoiceTimeManager } from "./managers/voice-time-manager";
   import { jobInit } from "./scheduled-jobs/jobs";
@@ -25,7 +26,11 @@ client.on("messageCreate", async (message) => {
 
   const content = message.content;
 
-  if (content.startsWith("!")) {    
+  var repo = new Repository();
+
+  repo.saveUserMessage(message.author.id, message.content);
+
+  if (content.startsWith("!")) {
     const match = content.match(/(\!\w+)\s(\d{2}-\d{2})/);
 
     if (match) await commandManager.handleCommand(message, match[1].slice(1).toLowerCase(), match[2]);
