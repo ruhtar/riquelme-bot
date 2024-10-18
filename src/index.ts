@@ -1,5 +1,6 @@
 export { client };
   import * as dotenv from "dotenv";
+  import { replyMessage } from "./conts/commands/commands-reply-messages";
   import { DatabaseInitializer } from "./database/database-initializer";
   import { Repository } from "./database/repository";
   import { CommandManager } from "./managers/command-mananger";
@@ -26,12 +27,17 @@ client.on("messageCreate", async (message) => {
 
   const content = message.content;
 
-  var repo = new Repository();
 
-  repo.saveUserMessage(message.author.id, message.content);
+  if (message.content) {
+    var repo = new Repository();
 
-  if(content === "!mensagens"){
+    repo.saveUserMessage(message.author.id, message.content);
 
+    if(content === "!mensagens"){
+      var counter = await repo.getMessagesCounter(message.author.id, );
+      replyMessage(message, "mensagens", counter);
+    }
+    return;
   }
 
   if (content.startsWith("!")) {
