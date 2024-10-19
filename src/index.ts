@@ -36,8 +36,8 @@ client.on("messageCreate", async (message) => {
     if(content === "!mensagens"){
       var counter = await repo.getMessagesCounter(message.author.id, );
       replyMessage(message, "mensagens", counter);
+      return;
     }
-    return;
   }
 
   if (content.startsWith("!")) {
