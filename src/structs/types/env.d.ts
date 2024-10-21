@@ -3,5 +3,6 @@ declare namespace NodeJS {
         BOT_TOKEN: string;
         GUILD_ID: string;
         CHANNEL_ID: string;
+        OPENAI_KEY: string;
     }
 }
