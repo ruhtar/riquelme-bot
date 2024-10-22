@@ -62,32 +62,44 @@ client.on("messageCreate", async (message) => {
 
 const channelName = 'amelhorqtemos';
 
-// setInterval(() => {
-//   console.log("checou")
-//   monitorTwitchChannel(channelName);
-// }, 60000);
+// Variável para armazenar o status atual da live
+let wasLive = false;
 
- monitorTwitchChannel(channelName).then((isLive)=>{
-  if(isLive){
+function checkLiveStatusPeriodically(channelName: string, interval: number) {
+  setInterval(() => {
+    monitorTwitchChannel(channelName).then((isLive) => {
+      // Se a live está ao vivo e não estava antes, envia uma mensagem
+      if (isLive && !wasLive) {
+        wasLive = true; // Atualiza o status para "live"
+        const channelId = process.env.CHANNEL_ID;
+        if (!channelId) return;
 
-    const channelId = process.env.CHANNEL_ID;
-    if (!channelId ) return;
+        const channel = client.channels.cache.get(channelId);
 
-    const channel = client.channels.cache.get(channelId);
+        if (channel) {
+          (channel as TextChannel).send({
+            content: `🚨 **RAPAZIADA, A STREAM DE \`${channelName}\` ESTÁ AO VIVO, VALDEZ!** 🚨\n\n🔴 Venham conferir: **[https://www.twitch.tv/${channelName}!](https://www.twitch.tv/${channelName})**\n\n`,
+          });
+        } else {
+          console.error('Canal do Discord não encontrado.');
+        }
+      } 
+      // Se a live está offline e estava online, atualiza o status para offline
+      else if (!isLive && wasLive) {
+        wasLive = false; // Atualiza o status para "offline"
+        console.log(`A stream de ${channelName} terminou.`);
+      } else {
+        console.log(`A stream de ${channelName} não está ao vivo.`);
+      }
+    }).catch(error => {
+      console.error(`Erro ao verificar live: ${error}`);
+    });
+  }, interval);
+}
 
-    if (channel) {
-      (channel as TextChannel).send({
-        content: `🚨 **RAPAZIADA, A STREAM DE \`${channelName}\` ESTÁ AO VIVO, VALDEZ!** 🚨\n\n🔴 Venham conferir: **[Clique aqui para assistir!](https://www.twitch.tv/${channelName})**\n\n`,
-    })
-    } else {
-      console.error('Canal do Discord não encontrado.');
-    }
-  }else {
-    console.log(`A stream de ${channelName} não está ao vivo.`);
-  }
- }).catch(error => {
-  console.error(`Erro ao verificar live: ${error}`);
-});
+// Exemplo de chamada da função
+const interval = 5 * 60 * 1000; // Verificar a cada 5 minutos (em milissegundos)
+checkLiveStatusPeriodically(channelName, interval);
 
 client.on("ready", async () => {
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidôô")
