@@ -15,8 +15,6 @@ export const getAccessToken = async (): Promise<string | undefined> => {
         const clientSecret = process.env.TWITCH_CLIENT_SECRET!;
 
       if (!clientId || !clientSecret) {
-        console.log('clientId',clientId)
-        console.log('clientSecret',clientSecret)
         throw new Error('clientId e clientSecret não estão definidos.');
       }
   
@@ -46,8 +44,6 @@ export const getAccessToken = async (): Promise<string | undefined> => {
 
     const clientId = process.env.TWITCH_CLIENT_ID!;
 
-    console.log('token',token)
-  
     if (!token) {
       console.error('Erro ao obter access token.');
       return false;
@@ -67,20 +63,12 @@ export const getAccessToken = async (): Promise<string | undefined> => {
   
     const data:any = await response.json();
 
-    console.log('data',data)
-  
     return data.data.length > 0;
   };
 
   export const monitorTwitchChannel = async (channelName: string) => {
     try {
       const isLive = await checkLiveStatus(channelName);
-  
-      if (isLive) {
-        console.log(`${channelName} está ao vivo!`);
-      } else {
-        console.log(`${channelName} não está ao vivo.`);
-      }
 
       return isLive;
     } catch (error) {

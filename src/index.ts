@@ -68,9 +68,8 @@ let wasLive = false;
 function checkLiveStatusPeriodically(channelName: string, interval: number) {
   setInterval(() => {
     monitorTwitchChannel(channelName).then((isLive) => {
-      // Se a live está ao vivo e não estava antes, envia uma mensagem
       if (isLive && !wasLive) {
-        wasLive = true; // Atualiza o status para "live"
+        wasLive = true; 
         const channelId = process.env.CHANNEL_ID;
         if (!channelId) return;
 
@@ -78,15 +77,14 @@ function checkLiveStatusPeriodically(channelName: string, interval: number) {
 
         if (channel) {
           (channel as TextChannel).send({
-            content: `🚨 **RAPAZIADA, A STREAM DE \`${channelName}\` ESTÁ AO VIVO, VALDEZ!** 🚨\n\n🔴 Venham conferir: **[https://www.twitch.tv/${channelName}!](https://www.twitch.tv/${channelName})**\n\n`,
+            content: `🚨 **RAPAZIADA, A STREAM DE \`${channelName}\` ESTÁ AO VIVO, VALDEZ!** 🚨\n\n🔴 Venham conferir: [https://www.twitch.tv/${channelName}](https://www.twitch.tv/${channelName})\n\n 🔥`,
           });
         } else {
           console.error('Canal do Discord não encontrado.');
         }
       } 
-      // Se a live está offline e estava online, atualiza o status para offline
       else if (!isLive && wasLive) {
-        wasLive = false; // Atualiza o status para "offline"
+        wasLive = false; 
         console.log(`A stream de ${channelName} terminou.`);
       } else {
         console.log(`A stream de ${channelName} não está ao vivo.`);
@@ -97,8 +95,7 @@ function checkLiveStatusPeriodically(channelName: string, interval: number) {
   }, interval);
 }
 
-// Exemplo de chamada da função
-const interval = 5 * 60 * 1000; // Verificar a cada 5 minutos (em milissegundos)
+const interval = 5 * 60 * 1000; 
 checkLiveStatusPeriodically(channelName, interval);
 
 client.on("ready", async () => {
