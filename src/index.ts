@@ -10,6 +10,7 @@ export { client };
   import { jobInit } from "./scheduled-jobs/jobs";
   import { ExtendedClient } from "./structs/ExtendedClient";
 
+import ollama from 'ollama';
 dotenv.config();
 
 const client = new ExtendedClient();
@@ -26,23 +27,49 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (message.author.id === client.user?.id) return; // Evita que Riquelme responda a si mesmo.
-
+  
   const content = message.content;
-
-
+  
   if (message.content) {
+    if (message.mentions.has(client.user!)) {
+      // Extrai o conteúdo da mensagem, removendo a menção ao bot
+      const userMessage = message.content.replace(`<@${client.user?.id}>`, '').trim();
+
+      // Verifica se a mensagem não está vazia após remover a menção
+      if (userMessage) {
+          try {
+            const mensagem = `Responda o mais humano possível, como se fosse uma conversa de fato. Faça respostas curtas e direto ao ponto. Responda essa mensagem sempre em português: "${userMessage}"`;
+
+            if (mensagem.trim()){
+
+              const response = await ollama.chat({
+                model: 'llama3.2',
+                messages: [{ role: 'user', content: mensagem }],
+              });
+              
+              // Envia a resposta de volta ao Discord
+              await message.channel.send(response.message.content);
+            }
+          } catch (error) {
+              console.error('Error calling Ollama API:', error);
+              await message.channel.send('vou responder não to de greve vsf arthur morte a nossos senhores');
+          }
+      }
+  }
+
+
     var repo = new Repository();
-
+    
     repo.saveUserMessage(message.author.id, message.content);
-
+    
     if(content === "!mensagens"){
       var counter = await repo.getMessagesCounter(message.author.id, );
       replyMessage(message, "mensagens", counter);
       return;
     }
   }
-
+  
+  if (message.author.id === client.user?.id) return; // Evita que Riquelme responda a si mesmo.
   if (content.startsWith("!")) {
     const match = content.match(/(\!\w+)\s(\d{2}-\d{2})/);
 
@@ -95,8 +122,8 @@ function checkLiveStatusPeriodically(channelName: string, interval: number) {
   }, interval);
 }
 
-const interval = 5 * 60 * 1000; 
-checkLiveStatusPeriodically(channelName, interval);
+const interval = 3 * 60 * 1000; 
+// checkLiveStatusPeriodically(channelName, interval);
 
 client.on("ready", async () => {
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidôô")
