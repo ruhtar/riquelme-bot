@@ -38,7 +38,7 @@ client.on("messageCreate", async (message) => {
       // Verifica se a mensagem não está vazia após remover a menção
       if (userMessage) {
           try {
-            const mensagem = `Responda o mais humano possível, como se fosse uma conversa de fato. Faça respostas curtas e direto ao ponto. Responda essa mensagem sempre em português: "${userMessage}"`;
+            const mensagem = `Você é um chatbot de Discord que responde comentários de usuários do servidor da maneiras mais humana possível, como se fosse uma conversa de fato. Faça respostas curtas e direto ao ponto. Responda as mensagens sempre em português. Aqui vai o comentário: "${userMessage}"`;
 
             if (mensagem.trim()){
 
@@ -114,7 +114,7 @@ function checkLiveStatusPeriodically(channelName: string, interval: number) {
         wasLive = false; 
         console.log(`A stream de ${channelName} terminou.`);
       } else {
-        console.log(`A stream de ${channelName} não está ao vivo.`);
+        // console.log(`A stream de ${channelName} não está ao vivo.`);
       }
     }).catch(error => {
       console.error(`Erro ao verificar live: ${error}`);
@@ -122,8 +122,8 @@ function checkLiveStatusPeriodically(channelName: string, interval: number) {
   }, interval);
 }
 
-const interval = 3 * 60 * 1000; 
-// checkLiveStatusPeriodically(channelName, interval);
+const interval = 2 * 60 * 1000; 
+checkLiveStatusPeriodically(channelName, interval);
 
 client.on("ready", async () => {
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidôô")
