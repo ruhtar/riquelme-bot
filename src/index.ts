@@ -104,9 +104,9 @@ function checkLiveStatusPeriodically(channelName: string, interval: number) {
 
         if (channel) {
           (channel as TextChannel).send({
-            content: `🚨 **RAPAZIADA, A STREAM DE \`${channelName}\` ESTÁ AO VIVO, VALDEZ!** 🚨\n\n🔴 Venham conferir: **[https://www.twitch.tv/${channelName}](https://www.twitch.tv/${channelName})**\n\n`,
+            content: `🚨 **RAPAZIADA, A STREAM DE \`${channelName}\` ESTÁ AO VIVO, VALDEZ!** 🚨\n\n🔴 Venham conferir: [https://www.twitch.tv/${channelName}](https://www.twitch.tv/${channelName})\n`,
           });
-        } else {
+        }else {
           console.error('Canal do Discord não encontrado.');
         }
       } 
