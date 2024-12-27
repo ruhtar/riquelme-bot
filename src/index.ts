@@ -30,33 +30,6 @@ client.on("messageCreate", async (message) => {
   const content = message.content;
   
   if (message.content) {
-  //   if (message.mentions.has(client.user!)) {
-  //     // Extrai o conteúdo da mensagem, removendo a menção ao bot
-  //     const userMessage = message.content.replace(`<@${client.user?.id}>`, '').trim();
-
-  //     // Verifica se a mensagem não está vazia após remover a menção
-  //     if (userMessage) {
-  //         try {
-  //           const mensagem = `Você é um chatbot de Discord que responde comentários de usuários do servidor da maneiras mais humana possível, como se fosse uma conversa de fato. Faça respostas curtas e direto ao ponto. Responda as mensagens sempre em português. Aqui vai o comentário: "${userMessage}"`;
-
-  //           if (mensagem.trim()){
-
-  //             const response = await ollama.chat({
-  //               model: 'llama3.2',
-  //               messages: [{ role: 'user', content: mensagem }],
-  //             });
-              
-  //             // Envia a resposta de volta ao Discord
-  //             await message.channel.send(response.message.content);
-  //           }
-  //         } catch (error) {
-  //             console.error('Error calling Ollama API:', error);
-  //             await message.channel.send('vou responder não to de greve vsf arthur morte a nossos senhores');
-  //         }
-  //     }
-  // }
-
-
     var repo = new Repository();
     
     repo.saveUserMessage(message.author.id, message.content);
