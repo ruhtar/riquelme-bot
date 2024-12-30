@@ -111,7 +111,7 @@ async function checkLiveStatusPeriodically(channelName: string, interval: number
 }
 
 const interval = 2 * 60 * 1000; 
-checkLiveStatusPeriodically(channelName, interval);
+checkLiveStatusPeriodically(channelName, interval); 
 
 client.on("ready", async () => {
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidôô")
