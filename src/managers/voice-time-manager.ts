@@ -1,13 +1,12 @@
 import { Message, VoiceState } from "discord.js";
-import { client } from "..";
+import { client, repo } from "..";
 import { Repository } from "../database/repository";
 
 export class VoiceTimeManager {
   private startTimePerUser = new Map<string, number>();
 
   public async getUserTotalTimeInVoice(message: Message, userId: string) {
-    const repository = new Repository();
-    const totalTime = await repository.getUsersTimeInVoiceByDate(userId);
+    const totalTime = await repo.getUsersTimeInVoiceByDate(userId);
     const user = client.users.cache.find((user) => user.id === userId);
     if (!user) return;
     const userDisplayName = user.displayName;
@@ -17,13 +16,12 @@ export class VoiceTimeManager {
 
   public async getSelfTotalTimeInVoice(message: Message, data: string = "") {
     const userId = message.author.id;
-    const repository = new Repository();
     let totalTime : number | null;
 
     if(data){
-      totalTime = await repository.getUsersTimeInVoiceByDate(userId, data)
+      totalTime = await repo.getUsersTimeInVoiceByDate(userId, data)
     }else{
-      totalTime = await repository.getUsersTimeInVoiceByDate(userId)
+      totalTime = await repo.getUsersTimeInVoiceByDate(userId)
     }
 
     this.replyTotalTimeMessage(totalTime, message, message.author.displayName);

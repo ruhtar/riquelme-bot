@@ -1,6 +1,5 @@
 import { Guild, TextChannel } from "discord.js";
-import { client } from "..";
-import { Repository } from "../database/repository";
+import { client, repo } from "..";
 import { CommandCount, UserActiveReport } from "../structs/types/DataTypes";
 import { getCurrentMonthName, getPreviousMonthAndYear } from "../utils/date-functions";
 const { GuildMember } = require('discord.js');
@@ -16,8 +15,6 @@ export const generateReport = async () => {
         const guild =  client.guilds.cache.get(guildId);
 
         if (!channel || !guild) return;
-
-        let repo = new Repository()
 
         const relatorioComandosMesAtual: CommandCount[] = await repo.getTopCommandsByMonthAndYear(getPreviousMonthAndYear());
 

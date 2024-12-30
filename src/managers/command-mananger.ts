@@ -8,10 +8,10 @@ import { Message, VoiceBasedChannel } from "discord.js";
 import ffmpegPath from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
 import { PassThrough, Readable } from 'stream';
+import { repo } from '..';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
 import { getRandomUrl } from '../conts/videos/videos-list';
-import { Repository } from "../database/repository";
 import { generateReport } from './report-manager';
 import { VoiceTimeManager } from "./voice-time-manager";
 
@@ -60,8 +60,7 @@ const connectToVoiceChannel = async (channel: VoiceBasedChannel): Promise<VoiceC
 export class CommandManager {
     public async getCommandCounter(message: Message, command: string, data: string = "") {
         if (counterCommandsList.includes(command.toLowerCase())) {
-            const repository = new Repository();
-            const counter = await repository.getCommandCounter(command, "", data);
+            const counter = await repo.getCommandCounter(command, "", data);
             replyMessage(message, command, counter);
         }
     }
@@ -85,9 +84,8 @@ export class CommandManager {
     }
 
     private async handleCounterCommand(message: Message, command: string, data: string) {
-        const repository = new Repository();
-        repository.insertCommand(command, message.author.id);
-        const counter = await repository.getCommandCounter(command, "", data);
+        repo.insertCommand(command, message.author.id);
+        const counter = await repo.getCommandCounter(command, "", data);
         replyMessage(message, command, counter);
     }
 
