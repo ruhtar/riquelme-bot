@@ -1,17 +1,12 @@
 import {
-    AudioPlayerStatus, StreamType, VoiceConnection,
-    VoiceConnectionStatus, createAudioPlayer, createAudioResource,
+    VoiceConnection,
+    VoiceConnectionStatus,
     entersState, joinVoiceChannel
 } from '@discordjs/voice';
-import ytdl from '@distube/ytdl-core';
 import { Message, VoiceBasedChannel } from "discord.js";
-import ffmpegPath from 'ffmpeg-static';
-import ffmpeg from 'fluent-ffmpeg';
-import { PassThrough, Readable } from 'stream';
 import { repo } from '..';
 import { counterCommandsList } from "../conts/commands/commands-list";
 import { replyMessage } from "../conts/commands/commands-reply-messages";
-import { getRandomUrl } from '../conts/videos/videos-list';
 import { generateReport } from './report-manager';
 import { VoiceTimeManager } from "./voice-time-manager";
 
@@ -20,25 +15,25 @@ const respondWithCommandList = async (message: Message) => {
     await message.reply("**Tá aqui sua lista de comandos, aviãozeiro:**\n" + "\n" + listaComandos);
 };
 
-const getProcessedAudioStream = async (url: string): Promise<Readable> => {
-    const stream = ytdl(url, {
-        filter: 'audioonly',
-        quality: 'highestaudio',
-        highWaterMark: 1 << 25
-    });
+// const getProcessedAudioStream = async (url: string): Promise<Readable> => {
+//     const stream = ytdl(url, {
+//         filter: 'audioonly',
+//         quality: 'highestaudio',
+//         highWaterMark: 1 << 25
+//     });
 
-    const passThroughStream = new PassThrough();
+//     const passThroughStream = new PassThrough();
 
-    if (ffmpegPath === null) throw new Error('FFmpeg path is not set.');
+//     if (ffmpegPath === null) throw new Error('FFmpeg path is not set.');
 
-    ffmpeg(stream)
-        .setFfmpegPath(ffmpegPath)
-        .audioFilter('loudnorm')
-        .format('mp3')
-        .pipe(passThroughStream)
+//     ffmpeg(stream)
+//         .setFfmpegPath(ffmpegPath)
+//         .audioFilter('loudnorm')
+//         .format('mp3')
+//         .pipe(passThroughStream)
 
-    return passThroughStream;
-};
+//     return passThroughStream;
+// };
 
 const connectToVoiceChannel = async (channel: VoiceBasedChannel): Promise<VoiceConnection> => {
     const connection = joinVoiceChannel({
@@ -89,33 +84,33 @@ export class CommandManager {
         replyMessage(message, command, counter);
     }
 
-    private async handleRiquelmeCommand(message: Message) {
-        const voiceChannel = message.member?.voice.channel;
-        if (!voiceChannel) {
-            await message.reply('Cê tem que tá em um canal de voz pra isso seu cabaço');
-            return;
-        }
+    // private async handleRiquelmeCommand(message: Message) {
+    //     const voiceChannel = message.member?.voice.channel;
+    //     if (!voiceChannel) {
+    //         await message.reply('Cê tem que tá em um canal de voz pra isso seu cabaço');
+    //         return;
+    //     }
 
-        try {
-            const connection = await connectToVoiceChannel(voiceChannel);
-            const player = createAudioPlayer();
-            connection.subscribe(player);
+    //     try {
+    //         const connection = await connectToVoiceChannel(voiceChannel);
+    //         const player = createAudioPlayer();
+    //         connection.subscribe(player);
 
-            await message.reply("BURUCUTUGURUGUDU AKSTIGUIRIGUIDÔÔ");
+    //         await message.reply("BURUCUTUGURUGUDU AKSTIGUIRIGUIDÔÔ");
 
-            player.on(AudioPlayerStatus.Idle, () => connection.destroy());
+    //         player.on(AudioPlayerStatus.Idle, () => connection.destroy());
 
-            const url = getRandomUrl();
-            const audioStream = await getProcessedAudioStream(url);
-            const resource = createAudioResource(audioStream, { inputType: StreamType.Arbitrary });
+    //         const url = getRandomUrl();
+    //         const audioStream = await getProcessedAudioStream(url);
+    //         const resource = createAudioResource(audioStream, { inputType: StreamType.Arbitrary });
 
-            player.play(resource);
-            await entersState(player, AudioPlayerStatus.Playing, 5000);
-        } catch (error) {
-            console.error('AVIÃOZEIRO!!!!!! DEU PANE AQUI:', error);
-            await message.reply("AVIÃOZEIRO, DEU ALGUMA PANE AQUI. VOU FICAR TE DEVENDO");
-        }
-    }
+    //         player.play(resource);
+    //         await entersState(player, AudioPlayerStatus.Playing, 5000);
+    //     } catch (error) {
+    //         console.error('AVIÃOZEIRO!!!!!! DEU PANE AQUI:', error);
+    //         await message.reply("AVIÃOZEIRO, DEU ALGUMA PANE AQUI. VOU FICAR TE DEVENDO");
+    //     }
+    // }
 
     private async handleVoiceCommand(message: Message, data: string) {
         const voiceTimeManager = new VoiceTimeManager();
