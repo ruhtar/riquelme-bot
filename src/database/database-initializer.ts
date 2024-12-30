@@ -10,15 +10,15 @@ export class DatabaseInitializer {
             } else {
                 console.log("Conectado ao banco de dados SQLite");
                 this.db.serialize(() => {
-                    this.createTimeInVoiceTable();
-                    this.createCommandsTables();
-                    this.createMessagesCounterTables();
+                    this.ensureTimeInVoiceTableIsCreated();
+                    this.ensureCommandsTablesIsCreated();
+                    this.ensureMessagesCounterTablesIsCreated();
                 });
             }
         });
     }
 
-    private createCommandsTables() {
+    private ensureCommandsTablesIsCreated() {
         this.db.run(`
         CREATE TABLE IF NOT EXISTS commands (
             id INTEGER PRIMARY KEY AUTOINCREMENT , 
@@ -29,7 +29,7 @@ export class DatabaseInitializer {
         `);
     }
 
-    private createMessagesCounterTables() {
+    private ensureMessagesCounterTablesIsCreated() {
         this.db.run(`
         CREATE TABLE IF NOT EXISTS messages_counter (
             id INTEGER PRIMARY KEY AUTOINCREMENT , 
@@ -40,7 +40,7 @@ export class DatabaseInitializer {
         `);
     }
 
-    private createTimeInVoiceTable() {
+    private ensureTimeInVoiceTableIsCreated() {
         this.db.run(`
             CREATE TABLE IF NOT EXISTS time_in_voice (
                 id INTEGER PRIMARY KEY AUTOINCREMENT , 

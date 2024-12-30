@@ -18,8 +18,6 @@ client.start();
 const voiceTimeManager = new VoiceTimeManager();
 export const repo = new Repository();
 
-jobInit();
-
 
 client.on('voiceStateUpdate', (oldState, newState) => {
   voiceTimeManager.CountUsersTimeOnVoice(oldState, newState);
@@ -60,4 +58,6 @@ client.on("ready", async () => {
   console.log("Como ja dizia xande do aviões: Burucutugurugudu akstiguiriguidôô")
 
   initTwitchMonitoring();
+
+  jobInit();
 });
