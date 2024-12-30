@@ -21,7 +21,7 @@ async function checkLiveStatusPeriodically(channelName: string, interval: number
     return;
   }
 
-  const channel = client.channels.cache.get(channelId) as TextChannel;
+  const channel = await client.channels.fetch(channelId) as TextChannel;
   if (!channel) {
     console.error('Erro: Canal do Discord não encontrado.');
     return;
@@ -117,7 +117,7 @@ export const getAccessToken = async (): Promise<string | undefined> => {
   };
 
   export const monitorTwitchChannel = async (channelName: string) => {
-    try {
+    try { 
       const isLive = await checkLiveStatus(channelName);
 
       return isLive;

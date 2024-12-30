@@ -11,7 +11,7 @@ export const generateReport = async () => {
 
         if (!channelId || !guildId) return;
 
-        const channel = client.channels.cache.get(channelId);
+        const channel = await client.channels.fetch(channelId);
         const guild =  client.guilds.cache.get(guildId);
 
         if (!channel || !guild) return;

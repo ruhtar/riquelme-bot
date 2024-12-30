@@ -4,15 +4,14 @@ import { parabens } from "../conts/birthday/birthday-reply-messages";
 import { birthdays } from "../conts/birthday/birthdays-list";
 import { getCurrentMonthAndDay } from "../utils/date-functions";
 
-export const checkBirthday = () => {
+export const checkBirthday = async () => {
   for (const pessoa in birthdays) {
     if (birthdays[pessoa] ===  getCurrentMonthAndDay()) {
       const channelId = process.env.CHANNEL_ID;
       
       if (!channelId) return;
       
-      const channel = client.channels.cache.get(channelId); //this is bad because if the bot has no cache info (no commands were sent), it will not know the channelId
-
+      const channel = await client.channels.fetch(channelId); 
       if (!channel) return;
       
 
