@@ -47,14 +47,14 @@ export class VoiceTimeManager {
     const userJoinedAChannel = newState.channel && userId && !oldState.channel;
 
     if (userJoinedAChannel) {
-      console.log(`${member.displayName} entrou em um canal`);
+      console.log(`${member.displayName} entrou em um canal - ${new Date()}`);
       this.startTimePerUser.set(userId, Math.floor(Date.now() / 1000));
     }
 
     const userDisconectedFromChannel = oldState.channel && userId && !newState.channel;
 
     if (userDisconectedFromChannel) {
-      console.log(`${member.displayName} saiu do canal`);
+      console.log(`${member.displayName} saiu do canal - ${new Date()}`);
 
       const endTime = Math.floor(Date.now() / 1000); // Converting to seconds
 

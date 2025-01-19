@@ -41,7 +41,7 @@ async function checkLiveStatusPeriodically(channelName: string, interval: number
         wasLive = false;
         console.log(`A live de ${channelName} terminou.`);
       } else {
-        console.log(`A live de ${channelName} permanece no estado atual: ${isLive ? 'ao vivo' : 'offline'}.`);
+        //console.log(`A live de ${channelName} permanece no estado atual: ${isLive ? 'ao vivo' : 'offline'}.`);
       }
     } catch (error) {
       console.error(`Erro ao verificar status da live: ${error}`);
